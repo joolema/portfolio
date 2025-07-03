@@ -1,28 +1,17 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState } from "react";
+import api from "../api/api";
+import BackButton from "../component/BackButton";
 
-const ProjectForm = ({ project, onSubmit, onCancel }) => {
+const CreateProjectForm = ({ onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     category: [""],
-    image: "",
-    visible: true,
   });
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState("");
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  useEffect(() => {
-    if (project) {
-      setFormData({
-        title: project.title || "",
-        description: project.description || "",
-        category: project.category.length > 0 ? project.category : [""],
-        image: project.image || "",
-        visible: project.visible !== undefined ? project.visible : true,
-      });
-    }
-  }, [project]);
 
   const validateForm = () => {
     const newErrors = {};
@@ -50,43 +39,37 @@ const ProjectForm = ({ project, onSubmit, onCancel }) => {
       formData.category.every((cat) => !cat.trim())
     ) {
       newErrors.category = "At least one category is required";
+    } else if (
+      formData.category.some(
+        (cat) =>
+          cat.trim() &&
+          !["web", "mobile", "desktop"].includes(cat.toLowerCase())
+      )
+    ) {
+      newErrors.category = "Categories must be one of: web, mobile, desktop";
     } else if (formData.category.some((cat) => cat.length > 50)) {
       newErrors.category = "Each category must be less than 50 characters";
     }
 
-    if (formData.image && !/^(https?:\/\/)/i.test(formData.image)) {
-      newErrors.image = "Image must be a valid URL";
+    if (!imageFile) {
+      newErrors.image = "Image is required";
+    } else if (!imageFile.type.startsWith("image/")) {
+      newErrors.image = "Please select a valid image file (e.g., .jpg, .png)";
+    } else if (imageFile.size > 5 * 1024 * 1024) {
+      newErrors.image = "Image file size must be less than 5MB";
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validateForm()) return;
-
-    setIsSubmitting(true);
-    try {
-      const dataToSend = {
-        ...formData,
-        category: formData.category.filter((cat) => cat.trim()),
-      };
-
-      if (project?._id) {
-        // Update existing project
-        await axios.put(`/api/projects/${project._id}`, dataToSend);
-      } else {
-        // Create new project
-        await axios.post("/api/projects", dataToSend);
-      }
-      onSubmit();
-    } catch (error) {
-      setErrors({
-        submit: error.response?.data?.message || "An error occurred",
-      });
-    } finally {
-      setIsSubmitting(false);
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImageFile(file);
+    if (file && file.type.startsWith("image/")) {
+      setImagePreview(URL.createObjectURL(file));
+    } else {
+      setImagePreview("");
     }
   };
 
@@ -109,15 +92,44 @@ const ProjectForm = ({ project, onSubmit, onCancel }) => {
     }
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    setIsSubmitting(true);
+    try {
+      const dataToSend = new FormData();
+      dataToSend.append("title", formData.title);
+      dataToSend.append("description", formData.description);
+      formData.category
+        .filter((cat) => cat.trim())
+        .forEach((cat) => dataToSend.append("category[]", cat));
+      dataToSend.append("image", imageFile);
+
+      await api.post("/api/project", dataToSend, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      onSubmit();
+    } catch (error) {
+      setErrors({
+        submit:
+          error.response?.data?.error?.join(", ") ||
+          error.response?.data?.message ||
+          "An error occurred",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6">
-        {project ? "Update Project" : "Create Project"}
-      </h2>
+    <div className="max-w-2xl mx-auto p-6 bg-[#0c0c0c] rounded-lg shadow-md">
+      <BackButton />
+      <h2 className="text-2xl font-bold mb-6 text-[#FAAD1B]">Create Project</h2>
 
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-[#FAAD1B]">
             Title
           </label>
           <input
@@ -126,7 +138,7 @@ const ProjectForm = ({ project, onSubmit, onCancel }) => {
             onChange={(e) =>
               setFormData({ ...formData, title: e.target.value })
             }
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            className="mt-1 block w-full rounded-md border-[#242424] bg-[#242424] text-white shadow-sm focus:border-[#22304C] focus:ring focus:ring-[#22304C] focus:ring-opacity-50"
           />
           {errors.title && (
             <p className="mt-1 text-sm text-red-600">{errors.title}</p>
@@ -134,7 +146,7 @@ const ProjectForm = ({ project, onSubmit, onCancel }) => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-[#FAAD1B]">
             Description
           </label>
           <textarea
@@ -143,7 +155,7 @@ const ProjectForm = ({ project, onSubmit, onCancel }) => {
               setFormData({ ...formData, description: e.target.value })
             }
             rows="4"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            className="mt-1 block w-full rounded-md border-[#242424] bg-[#242424] text-white shadow-sm focus:border-[#22304C] focus:ring focus:ring-[#22304C] focus:ring-opacity-50"
           />
           {errors.description && (
             <p className="mt-1 text-sm text-red-600">{errors.description}</p>
@@ -151,7 +163,7 @@ const ProjectForm = ({ project, onSubmit, onCancel }) => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-[#FAAD1B]">
             Categories
           </label>
           {formData.category.map((cat, index) => (
@@ -160,7 +172,8 @@ const ProjectForm = ({ project, onSubmit, onCancel }) => {
                 type="text"
                 value={cat}
                 onChange={(e) => handleCategoryChange(index, e.target.value)}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                placeholder="e.g., web, mobile, desktop"
+                className="block w-full rounded-md border-[#242424] bg-[#242424] text-white shadow-sm focus:border-[#22304C] focus:ring focus:ring-[#22304C] focus:ring-opacity-50"
               />
               {formData.category.length > 1 && (
                 <button
@@ -176,7 +189,7 @@ const ProjectForm = ({ project, onSubmit, onCancel }) => {
           <button
             type="button"
             onClick={addCategory}
-            className="mt-2 text-indigo-600 hover:text-indigo-800"
+            className="mt-2 text-[#FAAD1B] hover:text-[#22304C]"
           >
             Add Category
           </button>
@@ -186,34 +199,27 @@ const ProjectForm = ({ project, onSubmit, onCancel }) => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">
-            Image URL (optional)
+          <label className="block text-sm font-medium text-[#FAAD1B]">
+            Image
           </label>
+          {imagePreview && (
+            <img
+              src={imagePreview}
+              alt="Preview"
+              className="mt-2 mb-2 max-w-xs"
+            />
+          )}
           <input
-            type="text"
-            value={formData.image}
-            onChange={(e) =>
-              setFormData({ ...formData, image: e.target.value })
-            }
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            type="file"
+            id="image"
+            name="image"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="mt-1 block w-full rounded-md border-[#242424] bg-[#242424] text-white shadow-sm focus:border-[#22304C] focus:ring focus:ring-[#22304C] focus:ring-opacity-50"
           />
           {errors.image && (
             <p className="mt-1 text-sm text-red-600">{errors.image}</p>
           )}
-        </div>
-
-        <div className="mb-4">
-          <label className="flex items-center">
-            <input
-              type="checkbox"
-              checked={formData.visible}
-              onChange={(e) =>
-                setFormData({ ...formData, visible: e.target.checked })
-              }
-              className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-            />
-            <span className="ml-2 text-sm text-gray-700">Visible</span>
-          </label>
         </div>
 
         {errors.submit && (
@@ -224,16 +230,16 @@ const ProjectForm = ({ project, onSubmit, onCancel }) => {
           <button
             type="button"
             onClick={onCancel}
-            className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+            className="px-4 py-2 border border-[#242424] rounded-md text-[#FAAD1B] hover:bg-[#22304C]"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:bg-indigo-300"
+            className="px-4 py-2 bg-[#22304C] text-[#FAAD1B] rounded-md hover:bg-[#FAAD1B] hover:text-[#0c0c0c] disabled:bg-[#242424]"
           >
-            {isSubmitting ? "Submitting..." : project ? "Update" : "Create"}
+            {isSubmitting ? "Submitting..." : "Create"}
           </button>
         </div>
       </form>
@@ -241,4 +247,4 @@ const ProjectForm = ({ project, onSubmit, onCancel }) => {
   );
 };
 
-export default ProjectForm;
+export default CreateProjectForm;

@@ -1,5 +1,4 @@
-import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Home from "./component/Home";
 import Head from "./component/Head";
 import About from "./component/About";
@@ -8,23 +7,14 @@ import EducationWork from "./component/EducationWork";
 import FavTool from "./component/FavTool";
 import ContactUs from "./component/ContactUs";
 import Projects from "./component/Projects";
-//admin
-import Login from "./pages/admin/Login";
-import ProjectForm from "./pages/admin/ProjectForm";
-import ProjectList from "./pages/admin/ProjectList";
-import ChangePassword from "./pages/admin/ChangePassword";
-import ResetPassword from "./pages/admin/ResetPassword";
-const Admin = () => {
-  return (
-    <>
-      <Login />
-      <ProjectForm />
-      <ProjectList />
-      <ChangePassword />
-      <ResetPassword />
-    </>
-  );
-};
+// admin
+import Login from "./admin/Login";
+import CreateProjectForm from "./admin/CreateProjectForm";
+import UpdateProjectForm from "./admin/UpdateProjectForm";
+import ProjectList from "./admin/ProjectList";
+import ChangePassword from "./admin/ChangePassword";
+import ResetPassword from "./admin/ResetPassword";
+
 const Portfolio = () => {
   return (
     <>
@@ -41,13 +31,30 @@ const Portfolio = () => {
 };
 
 const App = () => {
+  const navigate = useNavigate();
+  const handleSubmit = () => navigate("/admin");
+  const handleCancel = () => navigate("/admin");
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Portfolio />} />
-        <Route path="/admin" element={<Admin />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Portfolio />} />
+      <Route path="/login" element={<Login />} />
+      <Route
+        path="/create"
+        element={
+          <CreateProjectForm onSubmit={handleSubmit} onCancel={handleCancel} />
+        }
+      />
+      <Route
+        path="/update/:id"
+        element={
+          <UpdateProjectForm onSubmit={handleSubmit} onCancel={handleCancel} />
+        }
+      />
+      <Route path="/change" element={<ChangePassword />} />
+      <Route path="/reset" element={<ResetPassword />} />
+      <Route path="/admin" element={<ProjectList />} />
+    </Routes>
   );
 };
 

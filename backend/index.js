@@ -1,11 +1,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const messageRouter = require("./router/messageRouter");
 const projectRouter = require("./router/projectRouters");
 require("dotenv").config();
 const app = express();
 
 app.use(express.json());
+app.use(cors());
+
 app.use("/api/message", messageRouter);
 app.use("/api/project", projectRouter);
 
@@ -20,3 +23,7 @@ mongoose
   .catch((error) => {
     console.log("db connection failed"), error.message;
   });
+
+app.get("/", (req, res) => {
+  res.status(200).json("server run successfully");
+});

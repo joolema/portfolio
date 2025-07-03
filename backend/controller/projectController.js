@@ -1,57 +1,72 @@
 const Project = require("../model/projectModel");
 const upload = require("../config/multer");
 const cloudinary = require("../config/cloudinary");
+const fs = require("fs").promises; // For file cleanup
 // @desc    Create a new project
 // @route   POST /api/projects
 // @access  Private (you might want to add authentication middleware)
 const createProject = async (req, res) => {
   try {
-    let image;
-    let cloudinaryId;
-    // Destructure required fields from request body
+    let image, cloudinaryId;
+    console.log(req.file);
+    console.log(req.body);
     const { title, description, category } = req.body;
-    // Check for required fields
     if (!title || !description || !category) {
       return res.status(400).json({
         success: false,
-        error: "Title, description, and category are required fields",
+        message: "fill all fields",
+        error: "missing fields",
       });
     }
-    if (req.file) {
-      try {
-        const result = await cloudinary.uploader.upload(req.file.path);
-        image = result.secure_url;
-        cloudinaryId = result.public_id;
-      } catch (error) {
-        return res.status(400).json({
-          success: false,
-          message: "image upload failed",
-          error: error.message,
-        });
-      }
-    } else {
+    // Handle image upload
+    if (!req.file) {
       return res.status(400).json({
         success: false,
-        message: "project must have at least one image",
+        error: "Project must have at least one image",
       });
     }
 
-    // Create the project
+    try {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      image = result.secure_url;
+      cloudinaryId = result.public_id;
+    } catch (uploadError) {
+      console.error("Cloudinary upload failed:", uploadError.message);
+      await fs
+        .unlink(req.file.path)
+        .catch((err) =>
+          console.error("Failed to delete temp file:", err.message)
+        );
+      return res.status(400).json({
+        success: false,
+        error: "Image upload failed. Please try again.",
+      });
+    }
+
+    // Clean up temporary file after successful upload
+    await fs
+      .unlink(req.file.path)
+      .catch((err) =>
+        console.error("Failed to delete temp file:", err.message)
+      );
+
+    // Create the project (rely on Mongoose validators)
     const project = await Project.create({
-      title,
-      description,
-      category,
-      image: image,
-      cloudinaryId: cloudinaryId,
+      title: title,
+      description: description,
+      category: category,
+      image,
+      cloudinaryId,
     });
 
     res.status(201).json({
       success: true,
+      message: "project created successfully",
       data: project,
     });
   } catch (error) {
+    console.error("Server error:", error.message);
     if (error.name === "ValidationError") {
-      // Handle validation errors
       const messages = Object.values(error.errors).map((val) => val.message);
       return res.status(400).json({
         success: false,
@@ -60,7 +75,8 @@ const createProject = async (req, res) => {
     }
     res.status(500).json({
       success: false,
-      error: "Server Error: " + error.message,
+      message: "Server Error. Please try again later.",
+      error: error.message,
     });
   }
 };
