@@ -5,52 +5,52 @@ const tools = [
   {
     name: "Adobe Illustrator",
     percentage: "90%",
-    icon: "/static/Illustrator.png",
+    icon: "https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485295/Illustrator_hxbceh.png",
   },
   {
     name: "Adobe Photoshop",
     percentage: "85%",
-    icon: "/static/Photoshop.png",
+    icon: "https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485301/Photoshop_yqrtcu.png",
   },
   {
     name: "Adobe Premiere Pro",
     percentage: "82%",
-    icon: "/static/Premiere Pro.png",
+    icon: "https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485305/Premiere_Pro_hxjgb6.png",
   },
   {
     name: "AutoCAD",
     percentage: "85%",
-    icon: "/static/Autocad.png",
+    icon: "https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485296/Autocad_vmstrh.png",
   },
   {
     name: "Autodesk Revit",
     percentage: "95%",
-    icon: "/static/REVIT.png",
+    icon: "https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485310/REVIT_tx1zik.png",
   },
   {
     name: "Archicad",
     percentage: "85%",
-    icon: "/static/Archicad.png",
+    icon: "https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485301/Archicad_thdb8l.png",
   },
   {
     name: "SketchUp",
     percentage: "90%",
-    icon: "/static/SketchUp.png",
+    icon: "https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485310/SketchUp_mlqik4.png",
   },
   {
     name: "Blender",
     percentage: "70%",
-    icon: "/static/Blender.png",
+    icon: "https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485296/Blender_cehier.png",
   },
   {
     name: "Lumion",
     percentage: "92%",
-    icon: "/static/Lumion.png",
+    icon: "https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485291/Lumion_qbykce.png",
   },
   {
     name: "Twinmotion",
     percentage: "90%",
-    icon: "/static/Twinmotion.png",
+    icon: "https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485307/Twinmotion_gh66ed.png",
   },
 ];
 

@@ -11,7 +11,7 @@ const Head = () => {
     <header className="fixed w-[100%] z-2 flex justify-between items-center p-4 bg-black shadow-md">
       <div className="logo flex items-center">
         <img
-          src="https://res.cloudinary.com/dsfknwexm/image/upload/v1751017683/ylogo_kbck43.png"
+          src="https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485308/ylogo_tm4tmx.png"
           alt="Your Brand Logo"
           className="w-32 md:w-44 m-0 p-0"
         />

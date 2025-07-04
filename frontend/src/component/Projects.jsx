@@ -37,31 +37,36 @@ const Projects = () => {
       description:
         "A beautiful home interior design lorem ipsum delore amet sit ",
       category: ["architecture", "design", "natural", "family"],
-      image: "/static/images.jpg",
+      image:
+        "https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485288/images_ojfu4q.jpg",
     },
     {
       title: "Office Space",
       description: "Modern workspace design",
       category: ["commercial", "design"],
-      image: "/static/images.jpg",
+      image:
+        "https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485288/images_ojfu4q.jpg",
     },
     {
       title: "Garden Landscape",
       description: "Sustainable outdoor design",
       category: ["landscape", "eco-friendly"],
-      image: "/static/images.jpg",
+      image:
+        "https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485288/images_ojfu4q.jpg",
     },
     {
       title: "Retail Store",
       description: "Contemporary retail interior",
       category: ["commercial", "retail"],
-      image: "/static/images.jpg",
+      image:
+        "https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485288/images_ojfu4q.jpg",
     },
     {
       title: "Apartment Complex",
       description: "Urban residential design",
       category: ["architecture", "residential"],
-      image: "/static/images.jpg",
+      image:
+        "https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485288/images_ojfu4q.jpg",
     },
   ];
 

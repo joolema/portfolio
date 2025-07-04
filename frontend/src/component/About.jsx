@@ -9,15 +9,27 @@ const About = () => {
     >
       {/* Full-width banner */}
       <div className="w-full flex flex-wrap justify-center gap-2 sm:gap-4 items-center h-auto sm:h-12 bg-[#FAAD1B] py-2 sm:py-0 px-4">
-        <img src="/static/image.png" alt="star shape" className="w-6 sm:w-8" />
+        <img
+          src="https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485287/image_wu05xs.png"
+          alt="star shape"
+          className="w-6 sm:w-8"
+        />
         <h1 className="text-[#242424] font-semibold text-base sm:text-lg md:text-xl">
           Architecture Student
         </h1>
-        <img src="/static/image.png" alt="star shape" className="w-6 sm:w-8" />
+        <img
+          src="https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485287/image_wu05xs.png"
+          alt="star shape"
+          className="w-6 sm:w-8"
+        />
         <h1 className="text-[#242424] font-semibold text-base sm:text-lg md:text-xl">
           Graphic Designer
         </h1>
-        <img src="/static/image.png" alt="star shape" className="w-6 sm:w-8" />
+        <img
+          src="https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485287/image_wu05xs.png"
+          alt="star shape"
+          className="w-6 sm:w-8"
+        />
         <h1 className="text-[#242424] font-semibold text-base sm:text-lg md:text-xl">
           Logo & Identity
         </h1>
@@ -29,7 +41,7 @@ const About = () => {
         <div className="w-2/3 h-auto md:w-1/2 mx-auto flex justify-center">
           <img
             className="w-full sm:w-3/4 md:w-2/3 max-w-xs h-auto"
-            src="/static/photo2.png"
+            src="https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485339/photo2_kb6elx.png"
             alt="Yohannis Lemalign"
           />
         </div>
