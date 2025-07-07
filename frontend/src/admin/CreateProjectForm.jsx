@@ -1,8 +1,19 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import api from "../api/api";
 import BackButton from "../component/BackButton";
-
-const CreateProjectForm = ({ onSubmit, onCancel }) => {
+import { useAuth } from "../context/authContext";
+import { useNavigate } from "react-router-dom";
+const CreateProjectForm = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    }
+  }, [isAuthenticated]);
+  const onCancel = () => {
+    navigate("/admin");
+  };
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -20,18 +31,18 @@ const CreateProjectForm = ({ onSubmit, onCancel }) => {
       newErrors.title = "Title is required";
     } else if (formData.title.length > 100) {
       newErrors.title = "Title must be less than 100 characters";
-    } else if (!/^[A-Za-z\s.,!?'-]*$/.test(formData.title)) {
+    } else if (!/^[A-Za-z0-9\s.,!?'-]*$/.test(formData.title)) {
       newErrors.title =
-        "Title can only contain letters, spaces, and common punctuation";
+        "Title can only contain letters, numbers, spaces, and common punctuation";
     }
 
     if (!formData.description.trim()) {
       newErrors.description = "Description is required";
     } else if (formData.description.length > 1000) {
       newErrors.description = "Description must be less than 1000 characters";
-    } else if (!/^[A-Za-z\s.,!?'-]*$/.test(formData.description)) {
+    } else if (!/^[A-Za-z0-9\s.,!?'-]*$/.test(formData.description)) {
       newErrors.description =
-        "Description can only contain letters, spaces, and common punctuation";
+        "Description can only contain letters, numbers, spaces, and common punctuation";
     }
 
     if (
@@ -39,24 +50,16 @@ const CreateProjectForm = ({ onSubmit, onCancel }) => {
       formData.category.every((cat) => !cat.trim())
     ) {
       newErrors.category = "At least one category is required";
-    } else if (
-      formData.category.some(
-        (cat) =>
-          cat.trim() &&
-          !["web", "mobile", "desktop"].includes(cat.toLowerCase())
-      )
-    ) {
-      newErrors.category = "Categories must be one of: web, mobile, desktop";
     } else if (formData.category.some((cat) => cat.length > 50)) {
       newErrors.category = "Each category must be less than 50 characters";
     }
 
-    if (!imageFile) {
-      newErrors.image = "Image is required";
-    } else if (!imageFile.type.startsWith("image/")) {
-      newErrors.image = "Please select a valid image file (e.g., .jpg, .png)";
-    } else if (imageFile.size > 5 * 1024 * 1024) {
-      newErrors.image = "Image file size must be less than 5MB";
+    if (imageFile) {
+      if (!imageFile.type.startsWith("image/")) {
+        newErrors.image = "Please select a valid image file (e.g., .jpg, .png)";
+      } else if (imageFile.size > 10 * 1024 * 1024) {
+        newErrors.image = "Image file size must be less than 10MB";
+      }
     }
 
     setErrors(newErrors);
@@ -107,13 +110,17 @@ const CreateProjectForm = ({ onSubmit, onCancel }) => {
       dataToSend.append("image", imageFile);
 
       await api.post("/api/project", dataToSend, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: {
+          timeout: 30000,
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
-      onSubmit();
+      navigate("/admin");
     } catch (error) {
       setErrors({
         submit:
-          error.response?.data?.error?.join(", ") ||
+          error.response?.data?.error ||
           error.response?.data?.message ||
           "An error occurred",
       });
@@ -172,7 +179,7 @@ const CreateProjectForm = ({ onSubmit, onCancel }) => {
                 type="text"
                 value={cat}
                 onChange={(e) => handleCategoryChange(index, e.target.value)}
-                placeholder="e.g., web, mobile, desktop"
+                placeholder="e.g. design, illustration..."
                 className="block w-full rounded-md border-[#242424] bg-[#242424] text-white shadow-sm focus:border-[#22304C] focus:ring focus:ring-[#22304C] focus:ring-opacity-50"
               />
               {formData.category.length > 1 && (

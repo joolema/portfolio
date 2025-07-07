@@ -13,6 +13,7 @@ const About = () => {
           src="https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485287/image_wu05xs.png"
           alt="star shape"
           className="w-6 sm:w-8"
+          loading="lazy"
         />
         <h1 className="text-[#242424] font-semibold text-base sm:text-lg md:text-xl">
           Architecture Student
@@ -21,6 +22,7 @@ const About = () => {
           src="https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485287/image_wu05xs.png"
           alt="star shape"
           className="w-6 sm:w-8"
+          loading="lazy"
         />
         <h1 className="text-[#242424] font-semibold text-base sm:text-lg md:text-xl">
           Graphic Designer
@@ -29,6 +31,7 @@ const About = () => {
           src="https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485287/image_wu05xs.png"
           alt="star shape"
           className="w-6 sm:w-8"
+          loading="lazy"
         />
         <h1 className="text-[#242424] font-semibold text-base sm:text-lg md:text-xl">
           Logo & Identity
@@ -43,6 +46,7 @@ const About = () => {
             className="w-full sm:w-3/4 md:w-2/3 max-w-xs h-auto"
             src="https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485339/photo2_kb6elx.png"
             alt="Yohannis Lemalign"
+            loading="lazy"
           />
         </div>
 

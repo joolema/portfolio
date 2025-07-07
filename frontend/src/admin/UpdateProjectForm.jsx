@@ -1,14 +1,18 @@
 import { useState, useEffect } from "react";
 import BackButton from "../component/BackButton";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/api";
+import { useAuth } from "../context/authContext";
 
-const UpdateProjectForm = ({ onSubmit, onCancel }) => {
+const UpdateProjectForm = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     category: [""],
+    visible: true,
   });
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
@@ -17,6 +21,11 @@ const UpdateProjectForm = ({ onSubmit, onCancel }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (isAuthLoading) return;
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
     const fetchProject = async () => {
       try {
         const response = await api.get(`/api/project/${id}`);
@@ -25,6 +34,7 @@ const UpdateProjectForm = ({ onSubmit, onCancel }) => {
           title: project.title || "",
           description: project.description || "",
           category: project.category?.length > 0 ? project.category : [""],
+          visible: project.visible || true,
         });
         setImagePreview(project.image || "");
         setIsLoading(false);
@@ -36,7 +46,15 @@ const UpdateProjectForm = ({ onSubmit, onCancel }) => {
       }
     };
     fetchProject();
-  }, [id]);
+  }, [id, isAuthenticated, isAuthLoading, navigate]);
+
+  useEffect(() => {
+    return () => {
+      if (imagePreview && imagePreview.startsWith("blob:")) {
+        URL.revokeObjectURL(imagePreview);
+      }
+    };
+  }, [imagePreview]);
 
   const validateForm = () => {
     const newErrors = {};
@@ -45,18 +63,18 @@ const UpdateProjectForm = ({ onSubmit, onCancel }) => {
       newErrors.title = "Title is required";
     } else if (formData.title.length > 100) {
       newErrors.title = "Title must be less than 100 characters";
-    } else if (!/^[A-Za-z\s.,!?'-]*$/.test(formData.title)) {
+    } else if (!/^[A-Za-z0-9\s.,!?'-]*$/.test(formData.title)) {
       newErrors.title =
-        "Title can only contain letters, spaces, and common punctuation";
+        "Title can only contain letters, numbers, spaces, and common punctuation";
     }
 
     if (!formData.description.trim()) {
       newErrors.description = "Description is required";
     } else if (formData.description.length > 1000) {
       newErrors.description = "Description must be less than 1000 characters";
-    } else if (!/^[A-Za-z\s.,!?'-]*$/.test(formData.description)) {
+    } else if (!/^[A-Za-z0-9\s.,!?'-]*$/.test(formData.description)) {
       newErrors.description =
-        "Description can only contain letters, spaces, and common punctuation";
+        "Description can only contain letters, numbers, spaces, and common punctuation";
     }
 
     if (
@@ -71,8 +89,8 @@ const UpdateProjectForm = ({ onSubmit, onCancel }) => {
     if (imageFile) {
       if (!imageFile.type.startsWith("image/")) {
         newErrors.image = "Please select a valid image file (e.g., .jpg, .png)";
-      } else if (imageFile.size > 5 * 1024 * 1024) {
-        newErrors.image = "Image file size must be less than 5MB";
+      } else if (imageFile.size > 10 * 1024 * 1024) {
+        newErrors.image = "Image file size must be less than 10MB";
       }
     }
 
@@ -114,32 +132,59 @@ const UpdateProjectForm = ({ onSubmit, onCancel }) => {
     if (!validateForm()) return;
 
     setIsSubmitting(true);
+    setErrors({}); // Clear previous errors
     try {
       const dataToSend = new FormData();
       dataToSend.append("title", formData.title);
       dataToSend.append("description", formData.description);
+      dataToSend.append("visible", formData.visible);
       formData.category
         .filter((cat) => cat.trim())
         .forEach((cat) => dataToSend.append("category[]", cat));
       if (imageFile) {
         dataToSend.append("image", imageFile);
       }
-
-      await api.patch(`/api/project/${id}`, dataToSend, {
-        headers: { "Content-Type": "multipart/form-data" },
+      const token = localStorage.getItem("token");
+      console.log("Submitting with token:", token);
+      console.log("FormData:", Object.fromEntries(dataToSend)); // For debugging
+      const response = await api.patch(`/api/project/${id}`, dataToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+          timeout: 30000,
+        },
       });
-      onSubmit();
+      console.log("PATCH response:", response.data);
+      navigate("/admin"); // Navigate to project list on success
     } catch (error) {
+      console.error("PATCH request error:", error, error.response);
       setErrors({
         submit:
-          error.response?.data?.error?.join(", ") ||
-          error.response?.data?.message ||
-          "An error occurred",
+          error.response?.status === 401
+            ? "Authentication failed. Please log in again."
+            : Array.isArray(error.response?.data?.error)
+            ? error.response.data.error.join(", ")
+            : error.response?.data?.message || "Failed to update project",
       });
+      if (error.response?.status === 401) {
+        navigate("/login"); // Redirect to login on auth failure
+      }
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  const handleCancel = () => {
+    navigate("/admin"); // Navigate to project list on cancel
+  };
+
+  if (isAuthLoading) {
+    return (
+      <div className="max-w-2xl mx-auto p-6 text-center text-[#FAAD1B]">
+        Checking authentication...
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -207,7 +252,7 @@ const UpdateProjectForm = ({ onSubmit, onCancel }) => {
                 type="text"
                 value={cat}
                 onChange={(e) => handleCategoryChange(index, e.target.value)}
-                placeholder="e.g., design illustration..."
+                placeholder="e.g. design, illustration..."
                 className="block w-full rounded-md border-[#242424] bg-[#242424] text-white shadow-sm focus:border-[#22304C] focus:ring focus:ring-[#22304C] focus:ring-opacity-50"
               />
               {formData.category.length > 1 && (
@@ -256,21 +301,33 @@ const UpdateProjectForm = ({ onSubmit, onCancel }) => {
             <p className="mt-1 text-sm text-red-600">{errors.image}</p>
           )}
         </div>
-        <div>
-          <label>visible</label>
-          <select name="visible" id="visible" value={project.visible}>
-            <option value="true">true</option>
-            <option value="false">false</option>
-          </select>
+
+        <div className="mb-4">
+          <label className="flex items-center text-sm font-medium text-[#FAAD1B]">
+            <input
+              type="checkbox"
+              id="visible"
+              checked={formData.visible}
+              onChange={(e) =>
+                setFormData({ ...formData, visible: e.target.checked })
+              }
+              className="mr-2"
+            />
+            Visible
+          </label>
         </div>
+
         {errors.submit && (
           <p className="mb-4 text-sm text-red-600">{errors.submit}</p>
+        )}
+        {isSubmitting && (
+          <p className="mb-4 text-sm text-[#FAAD1B]">Submitting...</p>
         )}
 
         <div className="flex justify-end space-x-2">
           <button
             type="button"
-            onClick={onCancel}
+            onClick={handleCancel}
             className="px-4 py-2 border border-[#242424] rounded-md text-[#FAAD1B] hover:bg-[#22304C]"
           >
             Cancel

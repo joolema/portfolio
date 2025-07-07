@@ -1,23 +1,31 @@
+import { Suspense, lazy } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import Home from "./component/Home";
-import Head from "./component/Head";
-import About from "./component/About";
-import Services from "./component/Services";
-import EducationWork from "./component/EducationWork";
-import FavTool from "./component/FavTool";
-import ContactUs from "./component/ContactUs";
-import Projects from "./component/Projects";
+
+const Home = lazy(() => import("./component/Home"));
+const Head = lazy(() => import("./component/Head"));
+const About = lazy(() => import("./component/About"));
+const Services = lazy(() => import("./component/Services"));
+const EducationWork = lazy(() => import("./component/EducationWork"));
+const FavTool = lazy(() => import("./component/FavTool"));
+const ContactUs = lazy(() => import("./component/ContactUs"));
+const Projects = lazy(() => import("./component/Projects"));
 // admin
-import Login from "./admin/Login";
-import CreateProjectForm from "./admin/CreateProjectForm";
-import UpdateProjectForm from "./admin/UpdateProjectForm";
-import ProjectList from "./admin/ProjectList";
-import ChangePassword from "./admin/ChangePassword";
-import ResetPassword from "./admin/ResetPassword";
+const Login = lazy(() => import("./admin/Login"));
+const CreateProjectForm = lazy(() => import("./admin/CreateProjectForm"));
+const UpdateProjectForm = lazy(() => import("./admin/UpdateProjectForm"));
+const ProjectList = lazy(() => import("./admin/ProjectList"));
+const ChangePassword = lazy(() => import("./admin/ChangePassword"));
+const ResetPassword = lazy(() => import("./admin/ResetPassword"));
 
 const Portfolio = () => {
   return (
-    <>
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center h-screen w-full">
+          Loading...
+        </div>
+      }
+    >
       <Head />
       <Home />
       <About />
@@ -26,35 +34,29 @@ const Portfolio = () => {
       <FavTool />
       <Projects />
       <ContactUs />
-    </>
+    </Suspense>
   );
 };
 
 const App = () => {
-  const navigate = useNavigate();
-  const handleSubmit = () => navigate("/admin");
-  const handleCancel = () => navigate("/admin");
-
   return (
-    <Routes>
-      <Route path="/" element={<Portfolio />} />
-      <Route path="/login" element={<Login />} />
-      <Route
-        path="/create"
-        element={
-          <CreateProjectForm onSubmit={handleSubmit} onCancel={handleCancel} />
-        }
-      />
-      <Route
-        path="/update/:id"
-        element={
-          <UpdateProjectForm onSubmit={handleSubmit} onCancel={handleCancel} />
-        }
-      />
-      <Route path="/change" element={<ChangePassword />} />
-      <Route path="/reset" element={<ResetPassword />} />
-      <Route path="/admin" element={<ProjectList />} />
-    </Routes>
+    <Suspense
+      fallback={
+        <div className="flex text-amber-50 items-center justify-center h-screen w-full">
+          Loading...
+        </div>
+      }
+    >
+      <Routes>
+        <Route path="/" element={<Portfolio />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/create" element={<CreateProjectForm />} />
+        <Route path="/update/:id" element={<UpdateProjectForm />} />
+        <Route path="/change" element={<ChangePassword />} />
+        <Route path="/reset" element={<ResetPassword />} />
+        <Route path="/admin" element={<ProjectList />} />
+      </Routes>
+    </Suspense>
   );
 };
 

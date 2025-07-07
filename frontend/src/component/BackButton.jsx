@@ -4,7 +4,11 @@ const BackButton = ({ to }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(-1); // Go back to the previous page
+    if (to) {
+      navigate(`/${to}`);
+    } else {
+      navigate(-1);
+    }
   };
 
   return (
