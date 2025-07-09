@@ -1,4 +1,5 @@
 const express = require("express");
+const auth = require("../middlewares/auth");
 const upload = require("../config/multer");
 const {
   getAllProjects,
@@ -12,8 +13,8 @@ const router = express.Router();
 
 router.get("/", getAllProjects);
 router.get("/:id", getProjectById);
-router.post("/", upload.single("image"), createProject);
-router.patch("/:id", upload.single("image"), updateProject);
-router.delete("/:id", deleteProject);
+router.post("/", auth, upload.single("image"), createProject);
+router.patch("/:id", auth, upload.single("image"), updateProject);
+router.delete("/:id", auth, deleteProject);
 
 module.exports = router;

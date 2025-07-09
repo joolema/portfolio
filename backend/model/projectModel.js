@@ -16,7 +16,7 @@ const projectSchema = new mongoose.Schema(
         },
         {
           validator: function (value) {
-            return /^[A-Za-z\s.,!?'-]*$/.test(value);
+            return /^[A-Za-z0-9\s.,!?'-]*$/.test(value);
           },
           message:
             "Title can only contain letters, spaces, and common punctuation",
@@ -36,7 +36,7 @@ const projectSchema = new mongoose.Schema(
         },
         {
           validator: function (value) {
-            return /^[A-Za-z\s.,!?'-]*$/.test(value);
+            return /^[A-Za-z0-9\s.,!?'-]*$/.test(value);
           },
           message:
             "Description can only contain letters, spaces, and common punctuation",
@@ -47,17 +47,25 @@ const projectSchema = new mongoose.Schema(
       type: [String],
       required: [true, "At least one category is required"],
       default: ["design"],
-      validate: {
-        validator: function (value) {
-          return (
-            value.length > 0 &&
-            value.every((category) =>
-              validator.isLength(category, { min: 1, max: 50 })
-            )
-          );
+      validate: [
+        {
+          validator: function (value) {
+            return (
+              value.length > 0 &&
+              value.every((category) =>
+                validator.isLength(category, { min: 1, max: 50 })
+              )
+            );
+          },
+          message: "Each category must be between 1 and 50 characters",
         },
-        message: "Each category must be between 1 and 50 characters",
-      },
+        {
+          validator: function (value) {
+            return /^[A-Za-z0-9\s.,!?'-]*$/.test(value);
+          },
+          message: "category must be alpha numeric",
+        },
+      ],
     },
     image: {
       type: String,

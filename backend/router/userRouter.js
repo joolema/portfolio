@@ -6,8 +6,11 @@ const {
   changePassword,
   resetPassword,
   resetPasswordConfirm,
-} = require("../controllers/authController");
-const authMiddleware = require("../middleware/authMiddleware");
+  getUsers,
+  getUser,
+  verifyToken,
+} = require("../controller/userController");
+const auth = require("../middlewares/auth");
 
 // Public routes
 router.post("/signup", Signup);
@@ -16,6 +19,10 @@ router.post("/reset-password", resetPassword);
 router.post("/reset-password/:token", resetPasswordConfirm);
 
 // Protected route
-router.post("/change-password", authMiddleware, changePassword);
+router.post("/change-password", auth, changePassword);
 
+//get
+router.get("/", getUsers);
+router.get("/:id", getUser);
+router.get("/verify/:token", verifyToken);
 module.exports = router;

@@ -31,7 +31,7 @@ const createProject = async (req, res) => {
       image = result.secure_url;
       cloudinaryId = result.public_id;
     } catch (uploadError) {
-      console.error("Cloudinary upload failed:", uploadError.message);
+      console.error("Cloudinary upload failed:", uploadError);
       await fs
         .unlink(req.file.path)
         .catch((err) =>
@@ -183,8 +183,13 @@ const updateProject = async (req, res) => {
 // @access  Private (you might want to add authentication middleware)
 const deleteProject = async (req, res) => {
   try {
-    const project = await Project.findById(req.params.id);
-
+    const project = await Project.findByIdAndDelete(req.params.id);
+    try {
+      const result = cloudinary.uploader.destroy(project.cloudinaryId);
+      console.log("image deleted from cloudinary", result);
+    } catch (error) {
+      console.log("failed to delete image from cloudinary", error.message);
+    }
     if (!project) {
       return res.status(404).json({
         success: false,
@@ -192,11 +197,8 @@ const deleteProject = async (req, res) => {
       });
     }
 
-    await project.remove();
-
     res.status(200).json({
       success: true,
-      data: {},
       message: "Project deleted successfully",
     });
   } catch (error) {

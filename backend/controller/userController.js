@@ -2,6 +2,7 @@ const User = require("../model/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
+const mongoose = require("mongoose");
 
 const Signup = async (req, res) => {
   try {
@@ -12,7 +13,11 @@ const Signup = async (req, res) => {
         message: "missing input fields",
       });
     }
-    const createdUser = new User({ userName, email, password });
+    const createdUser = new User({
+      userName: userName,
+      email: email,
+      password: password,
+    });
     await createdUser.save();
     res.status(201).json({
       success: true,
@@ -24,7 +29,7 @@ const Signup = async (req, res) => {
     });
   } catch (error) {
     console.log("user signup: ", error.message);
-    res.status.json({
+    res.status(500).json({
       success: false,
       message: "user signup failed",
       error: error.message,
@@ -59,9 +64,10 @@ const login = async (req, res) => {
     // Find user
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({
+      return res.status(404).json({
         success: false,
-        message: "Invalid email or password",
+        message: "no user with this email ",
+        error: "user with email not found",
       });
     }
 
@@ -70,7 +76,7 @@ const login = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({
         success: false,
-        message: "Invalid email or password",
+        error: "incorrect password",
       });
     }
 
@@ -99,7 +105,22 @@ const login = async (req, res) => {
     });
   }
 };
-
+const verifyToken = async (req, res) => {
+  const { token } = req.params;
+  try {
+    const decoded = await jwt.verify(token, process.env.JWT_SECRET);
+    res.status(200).json({
+      success: true,
+      message: "valid token",
+    });
+  } catch (error) {
+    console.log("token verification :", error.message);
+    res.status(400).json({
+      success: false,
+      message: "invalid token",
+    });
+  }
+};
 // Change password function (requires authentication)
 const changePassword = async (req, res) => {
   try {
@@ -266,10 +287,65 @@ const resetPasswordConfirm = async (req, res) => {
   }
 };
 
+const getUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    if (users.length === 0) {
+      return res
+        .status(200)
+        .json({ success: true, message: "no registered users" });
+    }
+
+    res.status(200).json({
+      success: true,
+      users,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "internal server error",
+      error: error.message,
+    });
+  }
+};
+
+const getUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "invalid id",
+        error: "invalid param",
+      });
+    }
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "user not found",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "internal server error",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   Signup,
   login,
   changePassword,
   resetPassword,
   resetPasswordConfirm,
+  getUsers,
+  getUser,
+  verifyToken,
 };
