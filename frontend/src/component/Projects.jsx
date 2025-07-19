@@ -4,7 +4,7 @@ const ProjectCard = ({ title, description, image, category }) => {
   return (
     <div className="bg-[var(--gray)] w-full h-auto sm-[40%] md:w-[30%] lg:w-[30%] flex-col items-center  rounded-3xl shadow-lg px-1 py-0">
       <img
-        className="w-full h-auto object-cover rounded-t-3xl"
+        className="w-full h-[50%] object-cover rounded-t-3xl"
         src={image}
         alt={title}
         loading="lazy"
@@ -70,13 +70,16 @@ const Projects = () => {
             My Latest Projects
           </h2>
         </div>
-
-        <div className="flex flex-wrap gap-4 justify-evenly w-[100%] ">
-          {error && <p>{error}</p>}
-          {projects.slice(0, visibleProjects).map((proj, index) => (
-            <ProjectCard key={`proj_${index}`} {...proj} />
-          ))}
-        </div>
+        {projects.length == 0 ? (
+          <div className="text-3xl text-gray-50 ">Coming Soon...</div>
+        ) : (
+          <div className="flex flex-wrap gap-4 justify-evenly w-[100%] ">
+            {error && <p>{error}</p>}
+            {projects.slice(0, visibleProjects).map((proj, index) => (
+              <ProjectCard key={`proj_${index}`} {...proj} />
+            ))}
+          </div>
+        )}
 
         {projects.length > 3 && (
           <button

@@ -220,6 +220,7 @@ const CreateProjectForm = () => {
             type="file"
             id="image"
             name="image"
+            multiple
             accept="image/*"
             onChange={handleImageChange}
             className="mt-1 block w-full rounded-md border-[#242424] bg-[#242424] text-white shadow-sm focus:border-[#22304C] focus:ring focus:ring-[#22304C] focus:ring-opacity-50"

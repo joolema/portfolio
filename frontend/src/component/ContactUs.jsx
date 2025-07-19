@@ -1,18 +1,59 @@
-import React from "react";
+import { useState, useEffect } from "react";
+import api from "../api/api";
 import {
   FaPhone,
   FaEnvelope,
   FaLinkedin,
   FaInstagram,
   FaFacebook,
-  FaBeer,
 } from "react-icons/fa";
 
 const ContactUs = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+    interest: "",
+    country: "",
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setIsLoading(true);
+      const response = await api.post("/api/message", formData);
+      if (response.status == 201) {
+        setIsLoading(false);
+        alert("message sent successfully");
+
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          message: "",
+          interest: "",
+          country: "",
+        });
+      }
+    } catch (error) {
+      setIsLoading(false);
+      setError(error.message);
+    }
+  };
   return (
     <section id="contact" className="bg-[var(--black)] w-full mx-auto">
       <div className="flex flex-col md:flex-row  lg:flex-row items-stretch justify-center w-[80%] mx-auto rounded-4xl ">
-        <div className="flex flex-col w-[80%] gap-4 justify-center md:w[50%] lg:w-[40%] p-2">
+        <div className="flex flex-col w-[80%] gap-4 justify-center md:w-[50%] lg:w-[40%] p-2">
           {/* bg-[var(--gray)]*/}
           <p className="text-[var(--orange)]">Contact Us</p>
           <p className="text-gray-50 font-bold ">
@@ -20,10 +61,18 @@ const ContactUs = () => {
             Let`s Talk for Your Next Projects
           </p>
           <div className="flex gap-2">
-            <FaInstagram className="text-[var(--orange)]" />
-            <FaFacebook className="text-[var(--orange)]" />
-            <FaEnvelope className="text-[var(--orange)]" />
-            <FaLinkedin className="text-[var(--orange)]" />
+            <a href="">
+              <FaInstagram className="text-[var(--orange)]" />
+            </a>
+            <a href="">
+              <FaFacebook className="text-[var(--orange)]" />
+            </a>
+            <a href="mailto:yohannesweb81@gmail.com">
+              <FaEnvelope className="text-[var(--orange)]" />
+            </a>
+            <a href="">
+              <FaLinkedin className="text-[var(--orange)]" />
+            </a>
           </div>
           <p className="text-xs font-extralight text-gray-50">
             "Let’s talk about your next project! Whether it's architecture,
@@ -47,15 +96,21 @@ const ContactUs = () => {
         {/* bg-gray-500
 rounded-4xl*/}
         <div className="flex w-full gap-2 h-auto md:w-[50%] lg:w-[50%]">
-          <form className="grid grid-col-1 m-auto py-3 px-3 gap-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2">
+          <form
+            onSubmit={handleSubmit}
+            className="grid grid-col-1 m-auto py-3 px-3 gap-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2"
+          >
             <div className="flex flex-col py-2 px-4">
               <label className="text-xs text-gray-50 font-light ml-2">
                 {" "}
                 Your Name
               </label>
               <input
-                type="name"
+                type="text"
                 name="name"
+                required
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="Ex. john doe"
                 className="border border-amber-50 text-gray-50 rounded-xl p-1 text-xs placeholder:text-gray-400"
               />
@@ -68,15 +123,15 @@ rounded-4xl*/}
               <select
                 className="border text-xs text-gray-400  border-amber-50 rounded-xl p-1"
                 id="options"
-                name="options"
+                name="interest"
+                value={formData.interest}
+                onChange={handleChange}
               >
-                <option className=" px-4 mx-auto" value="" disabled selected>
-                  select
-                </option>
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-                <option value="option3">Option 3</option>
-                <option value="option4">Option 4</option>
+                <option value="">select</option>
+                <option value="Hire">Hire</option>
+                <option value="Collaborate">Collaborate</option>
+                <option value="Advice">Advice</option>
+                <option value="Other">Other</option>
               </select>
             </div>
             <div className="flex flex-col py-2 px-4">
@@ -87,6 +142,9 @@ rounded-4xl*/}
               <input
                 type="email"
                 name="email"
+                required
+                value={formData.email}
+                onChange={handleChange}
                 placeholder="example@gmail.com"
                 className="border border-amber-50 text-gray-50 rounded-xl p-1 text-xs placeholder:text-gray-400"
               />
@@ -94,11 +152,17 @@ rounded-4xl*/}
             <div className="flex flex-col py-2 px-4">
               <label className="text-xs text-gray-50 font-light ml-2">
                 {" "}
-                Country
+                Country{" "}
+                <span className="text-gray-300 text-[0.825em] text-opacity-50%">
+                  (optional)
+                </span>
               </label>
               <input
-                type="country"
+                type="text"
                 name="country"
+                required
+                value={formData.country}
+                onChange={handleChange}
                 placeholder="place of residence"
                 className="border border-amber-50 text-gray-50 rounded-xl p-1 text-xs placeholder:text-gray-400"
               />
@@ -109,9 +173,12 @@ rounded-4xl*/}
                 Phone
               </label>
               <input
-                type="name"
-                name="name"
-                placeholder="0900000000"
+                type="text"
+                name="phone"
+                required
+                value={formData.phone}
+                onChange={handleChange}
+                placeholder="+25100000000"
                 className="border border-amber-50 text-gray-50 rounded-xl p-1 text-xs placeholder:text-gray-400"
               />
             </div>
@@ -123,10 +190,16 @@ rounded-4xl*/}
               <textarea
                 name="message"
                 className="border border-amber-50 text-gray-50 rounded-xl p-1 "
+                value={formData.message}
+                onChange={handleChange}
               ></textarea>
             </div>
+            {error && <div className="text-red-400">{error}</div>}
             <div className="flex justify-between items-center bg-[#FAAD1B] rounded-4xl px-1 py-1 col-span-full sm:w-1/2 md:w-1/2 ml-4">
-              <button className="bg-[#0c1f45] w-[80%] rounded-4xl p-2 flex-1 text-gray-50 text-sm sm:text-base">
+              <button
+                disabled={isLoading}
+                className="bg-[#0c1f45] w-[80%] rounded-4xl p-2 flex-1 text-gray-50 text-sm sm:text-base"
+              >
                 Submit
               </button>
               <div className="rounded-full bg-gray-50 p-2 w-[20%] h-[80%]"></div>

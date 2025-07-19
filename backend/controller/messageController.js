@@ -16,11 +16,11 @@ exports.sendMessage = async (req, res) => {
         pass: process.env.PASS,
       },
     });
-
+    console.log("email", email);
     await transporter.sendMail({
-      from: `"Portfolio Contact" <${process.env.EMAIL}>`,
-      to: process.env.OWNER,
-      subject: `New message from ${name}`,
+      from: `"Portfolio Contact" <${email}>`,
+      to: process.env.EMAIL,
+      subject: `New portfolio message from ${name}`,
       html: `
         <h3>New Contact Submission</h3>
         <p><strong>Name:</strong> ${name}</p>

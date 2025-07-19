@@ -23,7 +23,7 @@ mongoose
     });
   })
   .catch((error) => {
-    console.log("db connection failed"), error.message;
+    console.log("db connection failed", error.message);
   });
 
 app.get("/", (req, res) => {
