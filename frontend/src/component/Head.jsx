@@ -8,7 +8,7 @@ const Head = () => {
   };
 
   return (
-    <div className="w-[100%] fixed flex justify-center bg-black p-4  shadow-md z-10">
+    <div className="w-full fixed flex justify-center bg-black p-4  shadow-md z-30">
       <header className=" w-[80%]  flex justify-between items-center ">
         <div className="logo flex items-center">
           <img

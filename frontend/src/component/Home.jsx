@@ -2,59 +2,68 @@ import React from "react";
 
 function Home() {
   return (
-    <section className="bg-black py-0 w-full">
-      <div className="h-16"></div>
-      <div className="w-[70%] mx-auto flex flex-col md:flex-row justify-between items-center clip-sec">
-        <div className="flex-col justify-around w-full md:w-1/2 mb-8 md:mb-0">
-          <div className="relative inline-block mb-3 text-white">
-            {/* Corners */}
-            <div className="absolute top-0 left-0 w-2 h-2 bg-[#FBBF24]"></div>
-            <div className="absolute top-0 right-0 w-2 h-2 bg-[#FBBF24]"></div>
-            <div className="absolute bottom-0 left-0 w-2 h-2 bg-[#FBBF24]"></div>
-            <div className="absolute bottom-0 right-0 w-2 h-2 bg-[#FBBF24]"></div>
+    <section className="bg-black py-0 w-full relative">
+      <div className="filler h-16"></div>
+      <div>
+        <div className="w-[75%] mx-auto flex flex-col md:flex-row justify-between items-center clip-sec relative ">
+          <div className="flex-col justify-around h-full w-full md:w-1/2 mb-8 md:mb-0">
+            <div className="relative text-white flex items-center mb-12 w-fit h-auto">
+              {/* Corners */}
+              <div className="absolute z-2 bottom-10 left-0 w-4 h-3 bg-[#FBBF24]"></div>
+              <div className="absolute z-2 bottom-10 right-0 w-4 h-3 bg-[#FBBF24]"></div>
+              <div className="absolute z-2 bottom-0 left-0 w-4 h-3 bg-[#FBBF24]"></div>
+              <div className="absolute z-2 bottom-0 right-0 w-4 h-3 bg-[#FBBF24]"></div>
 
-            {/* Border lines */}
-            <div className="absolute top-1 left-2 right-2 h-px bg-gray-400"></div>
-            <div className="absolute bottom-1 left-2 right-2 h-px bg-gray-400"></div>
-            <div className="absolute top-2 bottom-2 left-1 w-px bg-gray-400"></div>
-            <div className="absolute top-2 bottom-2 right-1 w-px bg-gray-400"></div>
+              {/* Border lines */}
+              <div className="absolute bottom-11 left-2 right-2 h-px bg-gray-400"></div>
+              <div className="absolute bottom-1 left-2 right-2 h-px bg-gray-400"></div>
+              <div className="absolute top-1 bottom-0 left-1 w-px bg-gray-400"></div>
+              <div className="absolute top-1 bottom-0 right-1 w-px bg-gray-400"></div>
 
-            {/* Text */}
-            <div className="px-4 py-2 text-center font-bold">Holle There</div>
+              {/* Text */}
+              <div className="px-6 py-4 text-center font-bold">Holle There</div>
+            </div>
+            <h1 className="text-gray-50 mb-6 leading-normal font-bold text-4xl  md:text-3xl">
+              I`m{" "}
+              <span className="text-[#FAAD1B]">
+                Yohannis Lemalign,
+                <br />
+              </span>{" "}
+              Architecture Student &<br /> Graphic Designer <br />
+              from Ethiopia{" "}
+            </h1>
+            <p className="text-gray-50 mb-4 text-xs md:text-sm font-stretch-normal">
+              I`m an experienced Graphic Designer with 5+ years in the field,
+              <br />
+              collaborating with various companies and startups.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <a
+                href="#projects"
+                className="text-gray-50 bg-[#0c1f45] rounded-2xl px-4 h-8"
+              >
+                View My portfolio
+              </a>
+              <a
+                href="#contact"
+                className="border border-gray-50 text-gray-50 rounded-2xl h-8 px-4"
+              >
+                Hire Me
+              </a>
+            </div>
           </div>
-          <h1 className="text-gray-50 mb-4 font-extrabold text-2xl md:text-3xl">
-            I`m <span className="text-[#FAAD1B]">Yohannis Lemalign,</span>{" "}
-            Architecture Student & Graphic Designer from Ethiopia{" "}
-          </h1>
-          <p className="text-gray-50 mb-4 text-xs md:text-sm font-stretch-normal">
-            I`m an experienced Graphic Designer with 5+ years in the field,
-            collaborating with various companies and startups,
-          </p>
-          <div className="flex flex-wrap gap-4">
-            <a
-              href="#projects"
-              className="text-gray-50 bg-[#0c1f45] rounded-2xl px-4 h-8"
-            >
-              View My portfolio
-            </a>
-            <a
-              href="#contact"
-              className="border border-gray-50 text-gray-50 rounded-2xl h-8 px-4"
-            >
-              Hire Me
-            </a>
+
+          <div className="flex flex-col w-full h-screen md:w-1/2 justify-center relative">
+            <img
+              src="https://res.cloudinary.com/dq4kdrhto/image/upload/v1753044107/wwww_kr6tfv_f1d908.webp"
+              alt="Yohannis Lemalign"
+              className="w-auto h-fit  my-0 object-fill"
+            />
           </div>
         </div>
-        <div className="flex-col w-full md:w-1/2 flex justify-center relative">
-          <img
-            src="https://res.cloudinary.com/dq4kdrhto/image/upload/v1753026803/wwww_kr6tfv.webp"
-            alt="Yohannis Lemalign"
-            className="w-64 md:w-80 my-0 clip-img"
-          />
-        </div>
+        {/* Overlapping triangle on the right */}
+        <div className="clip-tri bg-[var(--blue)] absolute bottom-0 right-0 w-2/3 h-15 z-20"></div>
       </div>
-      <div className="flex justify-end"></div>
-      <div className="clip-tri w-full h-12 z-10 mt-0 bg-[var(--blue)]"></div>
     </section>
   );
 }

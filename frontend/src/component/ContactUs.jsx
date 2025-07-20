@@ -75,10 +75,9 @@ const ContactUs = () => {
             </a>
           </div>
           <p className="text-xs font-extralight text-gray-50">
-            "Let’s talk about your next project! Whether it's architecture,
-            graphic design, or a creative vision, I’m here to bring your ideas
-            to life with innovation and precision. Let's collaborate and create
-            something exceptional."{" "}
+            Whether it's architecture, graphic design, or a creative vision, I’m
+            here to bring your ideas to life with innovation and precision.
+            Let's collaborate and create something exceptional."{" "}
           </p>
           <div className="flex gap-2">
             <FaPhone className="text-[var(--orange)]" />

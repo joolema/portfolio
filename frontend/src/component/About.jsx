@@ -113,11 +113,11 @@ const About = () => {
               </p>
             </div>
           </div>
-          <div className="flex justify-between items-center bg-[#FAAD1B] rounded-4xl p-0 py-1 sm:w-1/2 md:w-1/2">
-            <button className="bg-[#0c1f45] w-full rounded-4xl p-2 flex-1 text-gray-50 text-sm sm:text-base">
+          <div className="flex justify-between items-center bg-[#FAAD1B] rounded-4xl p-0 py-1 w-[70%]">
+            <button className="ml-2 bg-[#0c1f45] w-[70%] rounded-4xl p-2 text-gray-50 text-sm sm:text-base">
               Download CV
             </button>
-            <div className="rounded-full bg-gray-50 p-2">
+            <div className="rounded-full bg-gray-50 p-2 mr-2">
               <MdArrowForward className="text-xl sm:text-2xl text-[#0c1f45]" />
             </div>
           </div>

@@ -8,9 +8,3 @@
 .clip-tri{
     clip-path: polygon(100% 10%,100% 100%,0% 100%);
 }
-.clip-sec{
-    clip-path: polygon(0% 0%,100% 0%,100% 80%,30% 100%,0% 100%);
-}
-.clip-img{
-    clip-path: polygon(0% 0%,100% 0%,100% 80%,0% 80%);
-}

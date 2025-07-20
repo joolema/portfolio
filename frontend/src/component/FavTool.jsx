@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 // Define tool data as a constant to avoid repetition
 const tools = [
@@ -75,8 +75,8 @@ const ToolItem = ({ name, percentage, icon }) => (
 
 const FavTool = () => {
   // Split tools into two columns
-  const firstColumn = tools.slice(0, 5);
-  const secondColumn = tools.slice(5);
+  const [max, setMax] = useState(tools.length / 2 - 1);
+  const firstColumn = tools.slice(0, max);
 
   return (
     <section
@@ -91,21 +91,40 @@ const FavTool = () => {
           Exploring the Tools Behind My Designs
         </h2>
       </div>
-
-      <div className="flex flex-col md:flex-row w-full sm:w-11/12 md:w-3/4 gap-4 mx-auto">
-        <div className="flex-col w-full">
+      <div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full mx-auto">
           {firstColumn.map((tool, index) => (
             <ToolItem key={`tool-${index}`} {...tool} />
           ))}
         </div>
-        <div className="flex-col w-full">
-          {secondColumn.map((tool, index) => (
-            <ToolItem key={`tool-${index + 5}`} {...tool} />
-          ))}
+        <div>
+          {max < tools.length ? (
+            <button
+              className="bg-[var(--orange)] p-2 border rounded-2xl "
+              onClick={() => {
+                setMax(tools.length);
+              }}
+              type="button"
+            >
+              see more...
+            </button>
+          ) : (
+            <div>
+              <button
+                className="bg-[var(--orange)] p-2 border rounded-2xl "
+                onClick={() => {
+                  setMax(tools.length / 2 - 1);
+                }}
+                type="button"
+              >
+                see less...
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
-      <hr className="w-full font-bold text-gray-50" />
+      <hr className="mt-4 w-full font-bold text-gray-50" />
     </section>
   );
 };

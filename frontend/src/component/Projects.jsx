@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import api from "../api/api";
 const ProjectCard = ({ title, description, image, category }) => {
   return (
-    <div className="bg-[var(--gray)] w-full h-auto sm-[40%] md:w-[30%] lg:w-[30%] flex-col items-center  rounded-3xl shadow-lg px-1 py-0">
+    <div className="bg-[var(--gray)] w-full h-auto sm-[40%] md:w-[30%] lg:w-[30%] flex flex-col items-center  rounded-3xl shadow-lg px-2 py-1 ">
       <img
-        className="w-full h-[50%] object-cover rounded-t-3xl"
+        className="w-full rounded-t-4xl object-fill"
         src={image}
         alt={title}
         loading="lazy"
       />
-      <div className="w-full flex flex-wrap pt-2 gap-2 ">
+      <div className="w-full flex flex-wrap pt-2 gap-2 mt-2 ">
         {category.map((cat, index) => (
           <p
             className="py-1 px-2 rounded-full bg-[var(--orange)] text-sm font-medium text-center whitespace-nowrap"
@@ -19,8 +19,7 @@ const ProjectCard = ({ title, description, image, category }) => {
           </p>
         ))}
       </div>
-      {/*todo:the project card list on full screen is fault*/}
-      <p className="text-xs text-gray-50 font-extralight m-2">
+      <p className="w-full text-xs text-gray-50 font-extralight px-2 pt-2 mt-2 mb-4">
         <span className="text-sm font-bold ">{title}-</span>
         {description}
       </p>
@@ -39,7 +38,6 @@ const Projects = () => {
       try {
         const response = await api.get("/api/project");
         setProjects(response.data.data);
-        console.log(response);
       } catch (error) {
         setError(
           error.message || error.error || "failed to load projects retry"
