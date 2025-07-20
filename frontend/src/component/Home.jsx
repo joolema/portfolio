@@ -47,7 +47,7 @@ function Home() {
         </div>
         <div className="flex-col w-full md:w-1/2 flex justify-center relative">
           <img
-            src="https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485402/yphoto_gwvbkk.png"
+            src="https://res.cloudinary.com/dq4kdrhto/image/upload/v1753026803/wwww_kr6tfv.webp"
             alt="Yohannis Lemalign"
             className="w-64 md:w-80 my-0 clip-img"
           />
