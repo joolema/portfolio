@@ -1,19 +1,22 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../api/api";
 // ResetPassword.jsx
 const ResetPassword = ({ onBack }) => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-
-  const handleResetPassword = () => {
+  const navigate = useNavigate();
+  const handleResetPassword = async () => {
     // Simulate password reset email (replace with real API call in production)
-    if (email === "admin@example.com") {
-      setMessage("Password reset link sent to your email!");
-      setTimeout(() => {
-        setMessage("");
-        onBack();
-      }, 2000);
-    } else {
-      setMessage("Email not found");
+    try {
+      const response = await api.post("/api/user/reset-password", {
+        email: email,
+      });
+      if (response.status == 200) {
+        setMessage("reset link sent to email");
+      }
+    } catch (error) {
+      setMessage(error?.response?.data?.error || "failed to send reset link");
     }
   };
 
@@ -46,7 +49,10 @@ const ResetPassword = ({ onBack }) => {
           Send Reset Link
         </button>
         <div className="mt-4 text-center">
-          <button onClick={onBack} className="text-blue-500 hover:underline">
+          <button
+            onClick={() => navigate("/login")}
+            className="text-blue-500 hover:underline"
+          >
             Back to Login
           </button>
         </div>

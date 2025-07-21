@@ -1,5 +1,6 @@
-import { MdArrowForward } from "react-icons/md";
+import { MdArrowDownward, MdArrowForward } from "react-icons/md";
 import { motion } from "framer-motion";
+import { useState } from "react";
 const BannerContent = () => {
   return (
     <div className="w-full flex flex-wrap justify-center gap-2 sm:gap-4 items-center h-auto sm:h-12 bg-[#FAAD1B] py-2 sm:py-0 px-4">
@@ -58,6 +59,7 @@ const Banner = () => {
 };
 
 const About = () => {
+  const [isHovered, setIsHovered] = useState(false);
   return (
     <div
       className="flex flex-col items-center bg-[#22304C] mb-0 pb-8"
@@ -79,7 +81,7 @@ const About = () => {
         </div>
 
         {/* Text section */}
-        <div className="w-full md:w-1/2 flex flex-col space-y-4 sm:space-y-6">
+        <div className="w-full md:w-1/2 flex flex-col space-y-4 sm:space-y-6 relative">
           <h2 className="text-lg sm:text-xl md:text-2xl font-light text-gray-50">
             About Me
           </h2>
@@ -113,12 +115,30 @@ const About = () => {
               </p>
             </div>
           </div>
-          <div className="flex justify-between items-center bg-[#FAAD1B] rounded-4xl p-0 py-1 w-[70%]">
-            <button className="ml-2 bg-[#0c1f45] w-[70%] rounded-4xl p-2 text-gray-50 text-sm sm:text-base">
+          <div
+            onMouseOver={() => setIsHovered(true)}
+            onMouseOut={() => setIsHovered(false)}
+            className={`flex justify-between items-center  rounded-4xl p-0 py-1    ${
+              isHovered
+                ? "p-2 absolute bottom-1 w-[40%] bg-amber-50 "
+                : "w-[50%] bg-[#FAAD1B]"
+            }`}
+          >
+            <button className="ml-2 bg-[var(--blue)] w-[70%] rounded-4xl p-2 text-gray-50 text-sm sm:text-base">
               Download CV
             </button>
-            <div className="rounded-full bg-gray-50 p-2 mr-2">
-              <MdArrowForward className="text-xl sm:text-2xl text-[#0c1f45]" />
+            <div
+              className={`rounded-full p-2 mr-2 ${
+                isHovered
+                  ? " bg-[var(--blue)] text-gray-50"
+                  : "bg-gray-50 text-[var(--blue)]"
+              }`}
+            >
+              {isHovered ? (
+                <MdArrowDownward className="text-xl sm:text-2xl " />
+              ) : (
+                <MdArrowForward className="text-xl sm:text-2xl " />
+              )}
             </div>
           </div>
         </div>

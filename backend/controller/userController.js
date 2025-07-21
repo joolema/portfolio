@@ -3,7 +3,13 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const mongoose = require("mongoose");
-
+const { randomBytes } = require("crypto");
+function generateRandomString(length = 12) {
+  const chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
+  const bytes = randomBytes(length);
+  return Array.from(bytes, (byte) => chars[byte % chars.length]).join("");
+}
 const Signup = async (req, res) => {
   try {
     const { userName, email, password } = req.body;
@@ -39,12 +45,10 @@ const Signup = async (req, res) => {
 
 // Configure nodemailer transporter
 const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST,
-  port: process.env.EMAIL_PORT,
-  secure: false, // true for 465, false for other ports
+  service: "gmail",
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    user: process.env.EMAIL,
+    pass: process.env.PASS,
   },
 });
 
@@ -189,7 +193,7 @@ const resetPassword = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: "No user found with this email",
+        error: "No user found with this email",
       });
     }
 
@@ -203,11 +207,11 @@ const resetPassword = async (req, res) => {
     // Create reset URL
     const resetUrl = `${req.protocol}://${req.get(
       "host"
-    )}/api/auth/reset-password/${resetToken}`;
+    )}/api/user/reset-password/${resetToken}`;
 
     // Send email
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: process.env.Email,
       to: user.email,
       subject: "Password Reset Request",
       html: `
@@ -239,15 +243,6 @@ const resetPassword = async (req, res) => {
 const resetPasswordConfirm = async (req, res) => {
   try {
     const { token } = req.params;
-    const { newPassword } = req.body;
-
-    // Input validation
-    if (!newPassword) {
-      return res.status(400).json({
-        success: false,
-        message: "New password is required",
-      });
-    }
 
     // Verify token
     let decoded;
@@ -270,12 +265,14 @@ const resetPasswordConfirm = async (req, res) => {
     }
 
     // Update password (pre-save hook will hash it)
+    const newPassword = generateRandomString();
+    console.log("pass", newPassword);
     user.password = newPassword;
     await user.save();
 
     res.status(200).json({
       success: true,
-      message: "Password reset successfully",
+      message: `temporary message: ${newPassword} . don't forget to change`,
     });
   } catch (error) {
     console.error("Reset password confirm error:", error.message);

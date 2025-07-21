@@ -3,6 +3,11 @@ import api from "../api/api";
 import { useNavigate } from "react-router-dom";
 import BackButton from "../component/BackButton";
 import { useAuth } from "../context/authContext";
+import {
+  PlusIcon,
+  ArrowLeftStartOnRectangleIcon,
+} from "@heroicons/react/24/solid";
+import { UserIcon } from "@heroicons/react/24/outline";
 const ProjectList = () => {
   const [projects, setProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -64,30 +69,37 @@ const ProjectList = () => {
   }
 
   return (
-    <div className=" p-6 bg-[var(--gray)] w-[100%]">
-      <BackButton to={" "} />
-      <div className="max-w-4xl mx-auto p-6 w-[100%] rounded-2xl border border-amber-50">
-        <div className="flex justify-between border border-amber-50 p-4 rounded-3xl">
+    <div className=" p-6 bg-[var(--black)] min-h-screen w-[100%]">
+      <div className="flex justify-between">
+        <BackButton to={" "} />
+        <div className="w-fit flex justify-between items-center">
+          <div className="flex justify-around items-center border-2 p-2 border-[var(--orange)] rounded-2xl">
+            <ArrowLeftStartOnRectangleIcon className="h-5 w-5 text-2xl text-[var(--orange)]" />
+            <button className="text-[var(--orange)] " onClick={handleLogout}>
+              Logout
+            </button>
+          </div>
+          <UserIcon
+            className="text-[var(--orange)] rounded-full ml-4 w-7 h-7"
+            onClick={() => navigate("/profile")}
+          />
+        </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto p-6 w-[100%] rounded-2xl border border-amber-50 bg-[var(--gray)]  shadow-xl shadow-gray-500 ">
+        <div className="flex justify-between border border-amber-50 p-4 rounded-3xl mb-5">
           <h1 className="text-[var(--orange)] text-2xl">
             List of all projects
           </h1>
-          <button
-            className="text-amber-50 border p-2 border-[var(--orange)] rounded-2xl"
-            onClick={handleLogout}
-          >
-            Logout
-          </button>
-        </div>
-
-        <div className="flex justify-end  p-6 rounded-4xl">
-          <button
-            className="border rounded-2xl p-4 bg-[var(--orange)]"
+          <div
             onClick={() => {
               navigate("/create");
             }}
+            className="flex justify-around items-center p-2 rounded-2xl bg-[var(--orange)]"
           >
-            create
-          </button>
+            <PlusIcon className="text-3xl h-5 w-5 text-[var(--black)]" />
+            <button className="rounded-2xl bg-[var(--orange)]">create</button>
+          </div>
         </div>
 
         {projects.length === 0 ? (

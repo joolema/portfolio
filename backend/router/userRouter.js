@@ -16,7 +16,7 @@ const auth = require("../middlewares/auth");
 router.post("/signup", Signup);
 router.post("/login", login);
 router.post("/reset-password", resetPassword);
-router.post("/reset-password/:token", resetPasswordConfirm);
+router.get("/reset-password/:token", resetPasswordConfirm);
 
 // Protected route
 router.post("/change-password", auth, changePassword);

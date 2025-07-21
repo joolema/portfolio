@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-
-const BackButton = ({ to }) => {
+import { ChevronLeftIcon } from "@heroicons/react/24/solid";
+const BackButton = ({ to, className }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -12,12 +12,15 @@ const BackButton = ({ to }) => {
   };
 
   return (
-    <button
-      onClick={handleClick}
-      className="px-4 py-2 border border-[#242424] rounded-md text-[#FAAD1B] hover:bg-[#22304C] hover:text-white transition-colors duration-200"
-    >
-      Back
-    </button>
+    <div className="flex w-20 border-2 rounded-2xl items-center border-[var(--orange)] justify-around hover:bg-[#22304C] hover:text-white transition-colors duration-200">
+      <ChevronLeftIcon className="w-5 h-5 ml-3 mr-0 text-3xl text-[var(--orange)]" />
+      <button
+        onClick={handleClick}
+        className={`${className} py-2 pr-4 rounded-md text-[#FAAD1B] `}
+      >
+        Back
+      </button>
+    </div>
   );
 };
 
