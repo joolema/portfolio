@@ -9,17 +9,13 @@ const projectSchema = new mongoose.Schema(
       trim: true,
       validate: [
         {
-          validator: function (value) {
-            return validator.isLength(value, { min: 1, max: 100 });
-          },
+          validator: (value) => validator.isLength(value, { min: 1, max: 100 }),
           message: "Title must be between 1 and 100 characters",
         },
         {
-          validator: function (value) {
-            return /^[A-Za-z0-9\s.,!?'-]*$/.test(value);
-          },
+          validator: (value) => /^[A-Za-z0-9\s.,!?'"()-]*$/.test(value),
           message:
-            "Title can only contain letters, spaces, and common punctuation",
+            "Title can only contain letters, numbers, spaces, and common punctuation",
         },
       ],
     },
@@ -29,17 +25,14 @@ const projectSchema = new mongoose.Schema(
       trim: true,
       validate: [
         {
-          validator: function (value) {
-            return validator.isLength(value, { min: 1, max: 1000 });
-          },
+          validator: (value) =>
+            validator.isLength(value, { min: 1, max: 1000 }),
           message: "Description must be between 1 and 1000 characters",
         },
         {
-          validator: function (value) {
-            return /^[A-Za-z0-9\s.,!?'-]*$/.test(value);
-          },
+          validator: (value) => /^[A-Za-z0-9\s.,!?'"()-]*$/.test(value),
           message:
-            "Description can only contain letters, spaces, and common punctuation",
+            "Description can only contain letters, numbers, spaces, and common punctuation",
         },
       ],
     },
@@ -49,40 +42,43 @@ const projectSchema = new mongoose.Schema(
       default: ["design"],
       validate: [
         {
-          validator: function (value) {
-            return (
-              value.length > 0 &&
-              value.every((category) =>
-                validator.isLength(category, { min: 1, max: 50 })
-              )
-            );
-          },
-          message: "Each category must be between 1 and 50 characters",
+          validator: (arr) =>
+            Array.isArray(arr) &&
+            arr.length > 0 &&
+            arr.every((val) => validator.isLength(val, { min: 1, max: 50 })),
+          message: "Each category must be 1 to 50 characters long",
         },
         {
-          validator: function (value) {
-            return /^[A-Za-z0-9\s.,!?'-]*$/.test(value);
-          },
-          message: "category must be alpha numeric",
+          validator: (arr) =>
+            arr.every((val) => /^[A-Za-z0-9\s.,!?'"()-]*$/.test(val)),
+          message: "Each category must be alphanumeric and clean",
         },
       ],
     },
-    image: {
-      type: String,
-      required: false,
-      trim: true,
-      validate: {
-        validator: function (value) {
-          return !value || validator.isURL(value);
+    images: [
+      {
+        image: {
+          type: String,
+          required: true,
+          validate: {
+            validator: (value) => validator.isURL(value),
+            message: "Image must be a valid URL",
+          },
         },
-        message: "Image must be a valid URL",
+        cloudinaryId: {
+          type: String,
+          required: true,
+          validate: {
+            validator: (value) => /^[a-z]+\/[a-z0-9]+$/.test(value),
+          },
+        },
       },
-    },
+    ],
+
     visible: {
       type: Boolean,
       required: true,
       default: true,
-      enum: [true, false],
     },
   },
   { timestamps: true }

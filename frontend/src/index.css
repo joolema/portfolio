@@ -1,5 +1,6 @@
 @import "tailwindcss";
 :root{
+    --dark-blue:#071738;
     --blue:#0c1f45;
     --orange:#FAAD1B;
     --black:#0c0c0c;
@@ -7,4 +8,10 @@
 }
 .clip-tri{
     clip-path: polygon(100% 10%,100% 100%,0% 100%);
+}
+.outlined-text {
+  color: transparent;               
+  -webkit-text-stroke: 1px white;     
+  font-weight: bold;
+  transform: rotate(270deg);           
 }

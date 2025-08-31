@@ -3,15 +3,14 @@ import api from "../api/api";
 import { useNavigate } from "react-router-dom";
 import BackButton from "../component/BackButton";
 import { useAuth } from "../context/authContext";
+import { useProject } from "../context/projectContext";
 import {
   PlusIcon,
   ArrowLeftStartOnRectangleIcon,
 } from "@heroicons/react/24/solid";
-import { UserIcon } from "@heroicons/react/24/outline";
+import { LockClosedIcon } from "@heroicons/react/24/outline";
 const ProjectList = () => {
-  const [projects, setProjects] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { projects, isLoading, error } = useProject();
   const { logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -19,19 +18,8 @@ const ProjectList = () => {
     if (!isAuthenticated) {
       navigate("/login");
     }
-    const fetchProjects = async () => {
-      try {
-        const response = await api.get("/api/project");
-        setProjects(response.data.data);
-        setIsLoading(false);
-      } catch (err) {
-        setError(err.response?.data?.message || "Failed to fetch projects");
-        setIsLoading(false);
-      }
-    };
-
-    fetchProjects();
   }, [isAuthenticated]);
+
   const handleLogout = () => {
     logout();
   };
@@ -79,9 +67,10 @@ const ProjectList = () => {
               Logout
             </button>
           </div>
-          <UserIcon
+          <LockClosedIcon
+            title="change password"
             className="text-[var(--orange)] rounded-full ml-4 w-7 h-7"
-            onClick={() => navigate("/profile")}
+            onClick={() => navigate("/change")}
           />
         </div>
       </div>
@@ -112,9 +101,9 @@ const ProjectList = () => {
                 className="border border-amber-50 bg-[#000000] rounded-lg shadow-md p-4 flex flex-col md:flex-row gap-4"
               >
                 {console.log(project.visible)}
-                {project.image && (
+                {project.images && (
                   <img
-                    src={project.image}
+                    src={project.images[0].image}
                     alt={project.title}
                     className="w-full md:w-32 h-32 object-cover rounded-md"
                   />

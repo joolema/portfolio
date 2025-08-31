@@ -3,115 +3,55 @@ import { FaGraduationCap, FaBriefcase } from "react-icons/fa";
 
 const EducationWork = () => {
   return (
-    <section id="edu" className="bg-[#0c0c0c] ">
-      <div className="py-8 sm:py-12 flex flex-col items-center justify-center w-full">
-        <div className="flex-col w-full sm:w-2/3 md:w-1/2 text-center px-4">
-          <h1 className="text-2xl sm:text-3xl text-[var(--orange)]">
-            Education & Work
-          </h1>
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-50 mt-2">
-            My Academic and Professional Journey
-          </h2>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-4 m-4 w-full sm:w-11/12 md:w-3/4 justify-center">
-          {/* Education Grid */}
-          <div className="grid-cols-1 gap-4 bg-[#242424] px-4 py-6 sm:py-7 rounded-2xl w-full sm:w-1/2">
-            <div className="flex gap-4 items-center">
-              <FaGraduationCap className="text-5xl sm:text-7xl text-[var(--orange)]" />
-              <h3 className="text-2xl sm:text-4xl text-gray-50">Education</h3>
-            </div>
-            <div className="flex ml-2 items-center">
-              <div className="border-l-2 border-[var(--orange)] h-12 relative top-5"></div>
-              <div className="border-[var(--orange)] relative right-2 bg-[var(--orange)] w-3 h-3 rounded-full"></div>
-              <div>
-                <p className="text-gray-50 text-sm sm:text-base">
-                  <span className="font-bold text-gray-50">Elementary</span> -
-                  Sanete Primary School / 2002 - 2009
-                </p>
-              </div>
-            </div>
-            <div className="flex ml-2 items-center">
-              <div className="border-l-2 border-[var(--orange)] h-12 relative top-5"></div>
-              <div className="border-[var(--orange)] relative right-2 bg-[var(--orange)] w-3 h-3 rounded-full"></div>
-              <div>
-                <p className="text-gray-50 text-sm sm:text-base">
-                  <span className="font-bold text-gray-50">High School</span> -
-                  Goba High School / 2010 - 2011
-                </p>
-              </div>
-            </div>
-            <div className="flex ml-2 items-center">
-              <div className="border-l-2 border-[var(--orange)] h-12 relative top-5"></div>
-              <div className="border-[var(--orange)] relative right-2 bg-[var(--orange)] w-3 h-3 rounded-full"></div>
-              <div>
-                <p className="text-gray-50 text-sm sm:text-base">
-                  <span className="font-bold text-gray-50">Preparatory</span> -
-                  Batu Terara Secondary School / 2012 - 2013
-                </p>
-              </div>
-            </div>
-            <div className="flex ml-2 items-center">
-              <div className="border-[var(--orange)] relative right-1.5 top-0.5 bg-[var(--orange)] w-3 h-3 rounded-full"></div>
-              <div>
-                <p className="text-gray-50 text-sm sm:text-base">
-                  <span className="font-bold text-gray-50">University</span> -
-                  Adama Science and Technology University / 2014 - Present
-                </p>
-              </div>
+    <section id="edu" className=" w-[100%] items-center mt-8  ">
+      {/* Work Grid */}
+      <div className=" w-[60%] text-2xl sm:w-[40%] sm:h-[400px] flex items-center py-4 mx-auto px-8  bg-[var(--dark-blue)]  rounded-xl">
+        <div className=" flex flex-col gap-2 w-fit mx-auto  ">
+          <div className="flex ml-2 mx-auto ">
+            <div className="border-2 border-white relative right-2 mt-5  w-3 h-3 rounded-full"></div>
+            <div className="flex flex-col ">
+              <p className="font-bold text-gray-50 text-xl">Elementary</p>
+              <p className="text-gray-50 text-xs font-light">
+                Sanete Primary School <br />
+                2002 - 2009
+              </p>
             </div>
           </div>
-          {/* Work Grid */}
-          <div className="grid-cols-1 gap-4 bg-[#242424] px-4 py-6 sm:py-7 rounded-2xl w-full sm:w-1/2">
-            <div className="flex gap-4 items-center">
-              <FaBriefcase className="text-4xl sm:text-5xl text-[var(--orange)]" />
-              <h3 className="text-2xl sm:text-4xl text-gray-50">
-                Work Experience
-              </h3>
+          <div className="flex ml-2">
+            <div className="border-2 border-white relative right-2 mt-5  w-3 h-3 rounded-full"></div>
+            <div className="flex flex-col">
+              <span className="font-bold text-gray-50 text-xl">
+                High School
+              </span>
+              <p className="text-gray-50 text-xs font-light ">
+                Goba High School <br /> 2010 - 2011
+              </p>
             </div>
-            <div className="flex ml-2 items-center">
-              <div className="border-l-2 border-[var(--orange)] h-12 relative top-5"></div>
-              <div className="border-[var(--orange)] relative right-2 bg-[var(--orange)] w-3 h-3 rounded-full"></div>
-              <div>
-                <p className="text-gray-50 text-sm sm:text-base">
-                  Three Months of Internship
-                </p>
-              </div>
+          </div>
+          <div className="flex ml-2">
+            <div className="border-2 border-white relative right-2 mt-5  w-3 h-3 rounded-full"></div>
+            <div className="flex flex-col">
+              <span className="font-bold text-gray-50 text-xl">
+                Preparatory
+              </span>
+              <p className="text-gray-50 text-xs font-light ">
+                Batu Terara Secondary <br /> School/ 2012 - 2013
+              </p>
             </div>
-            <div className="flex ml-2 items-center">
-              <div className="border-l-2 border-[var(--orange)] h-12 relative top-5"></div>
-              <div className="border-[var(--orange)] relative right-2 bg-[var(--orange)] w-3 h-3 rounded-full"></div>
-              <div>
-                <p className="text-gray-50 text-sm sm:text-base">
-                  Participated in Continuous College Projects
-                </p>
-              </div>
-            </div>
-            <div className="flex ml-2 items-center">
-              <div className="border-l-2 border-[var(--orange)] h-12 relative top-5"></div>
-              <div className="border-[var(--orange)] relative right-2 bg-[var(--orange)] w-3 h-3 rounded-full"></div>
-              <div>
-                <p className="text-gray-50 text-sm sm:text-base">
-                  <span className="font-bold text-gray-50">Meseso Studio</span>{" "}
-                  - Graphics Design and Visual Arts / 2011 - 2013
-                </p>
-              </div>
-            </div>
-            <div className="flex ml-2 items-center">
-              <div className="border-[var(--orange)] relative right-1.5 top-0.5 bg-[var(--orange)] w-3 h-3 rounded-full"></div>
-              <div>
-                <p className="text-gray-50 text-sm sm:text-base">
-                  <span className="font-bold text-gray-50">Self-Employed</span>{" "}
-                  - Graphics Design and Visual Arts / 2014 - 2017
-                </p>
-              </div>
+          </div>
+          <div className="flex ml-2">
+            <div className="border-2 border-white relative right-2 mt-5  w-3 h-3 rounded-full"></div>
+            <div className="flex flex-col">
+              <span className="font-bold text-gray-50 text-xl">University</span>
+              <p className="text-gray-50 text-xs font-light ">
+                Adama Science and <br />
+                Technology University <br /> 2014 - now
+              </p>
             </div>
           </div>
         </div>
       </div>
-
-      <hr className="text-gray-50" />
     </section>
   );
 };
-
 export default EducationWork;

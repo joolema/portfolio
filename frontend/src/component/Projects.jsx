@@ -1,25 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import api from "../api/api";
-const ProjectCard = ({ title, description, image, category }) => {
+import { useProject } from "../context/projectContext";
+const ProjectCard = ({ title, description, images, category }) => {
   return (
-    <div className="bg-[var(--gray)] w-full h-auto sm-[40%] md:w-[30%] lg:w-[30%] flex flex-col items-center  rounded-3xl shadow-lg px-2 py-1 ">
-      <img
-        className="w-full rounded-t-4xl object-fill"
-        src={image}
-        alt={title}
-        loading="lazy"
-      />
-      <div className="w-full flex flex-wrap pt-2 gap-2 mt-2 ">
-        {category.map((cat, index) => (
-          <p
-            className="py-1 px-2 rounded-full bg-[var(--orange)] text-sm font-medium text-center whitespace-nowrap"
-            key={`cat_${index}`}
-          >
-            {cat}
-          </p>
-        ))}
+    <div className="bg-[var(--gray)] w-full h-auto sm-[40%] md:w-[30%] lg:w-[30%] flex flex-col items-center   shadow-lg  hover:scale-105 transition group">
+      <div className="w-full group-hover:opacity-50">
+        <img
+          className="w-full object-fill"
+          src={images[0].image}
+          alt={title}
+          loading="lazy"
+        />
+        <div className="w-full flex flex-wrap pt-2 gap-2 my-2 ">
+          {category.map((cat, index) => (
+            <p
+              className="py-1 px-2 rounded-full bg-[var(--orange)] text-sm font-medium text-center whitespace-nowrap"
+              key={`cat_${index}`}
+            >
+              {cat}
+            </p>
+          ))}
+        </div>
       </div>
-      <p className="w-full text-xs text-gray-50 font-extralight px-2 pt-2 mt-2 mb-4">
+
+      <p className="absolute inset-20 bg-[var(--blue)] w-fit h-fit p-4 text-xs text-gray-50 font-extralight px-2 pt-2 mt-2 mb-4 opacity-0 group-hover:opacity-100 transition duration-500">
         <span className="text-sm font-bold ">{title}-</span>
         {description}
       </p>
@@ -28,12 +32,12 @@ const ProjectCard = ({ title, description, image, category }) => {
 };
 
 const Projects = () => {
+  const { projects, isLoading, error } = useProject();
   const [visibleProjects, setVisibleProjects] = useState(3);
   const [visible, setVisible] = useState(false);
-  const [error, setError] = useState("");
-  const [projects, setProjects] = useState([]);
+  console.log(projects);
   //data
-  useEffect(() => {
+  /*useEffect(() => {
     const getProjects = async () => {
       try {
         const response = await api.get("/api/project");
@@ -45,7 +49,7 @@ const Projects = () => {
       }
     };
     getProjects();
-  }, []);
+  }, []); */
 
   const showMoreProjects = () => {
     if (!visible && visibleProjects < projects.length) {

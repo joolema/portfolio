@@ -13,8 +13,8 @@ const router = express.Router();
 
 router.get("/", getAllProjects);
 router.get("/:id", getProjectById);
-router.post("/", auth, upload.single("image"), createProject);
-router.patch("/:id", auth, upload.single("image"), updateProject);
+router.post("/", auth, upload.array("images", 10), createProject);
+router.patch("/:id", auth, upload.single("images"), updateProject);
 router.delete("/:id", auth, deleteProject);
 
 module.exports = router;

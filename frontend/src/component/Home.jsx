@@ -40,7 +40,7 @@ function Home() {
             <div className="flex flex-wrap gap-4">
               <a
                 href="#projects"
-                className="text-gray-50 bg-[#0c1f45] rounded-2xl px-4 h-8"
+                className="text-gray-50 bg-[var(--blue)] rounded-2xl px-4 h-8"
               >
                 View My portfolio
               </a>
@@ -57,7 +57,10 @@ function Home() {
             <img
               src="https://res.cloudinary.com/dq4kdrhto/image/upload/v1753044107/wwww_kr6tfv_f1d908.webp"
               alt="Yohannis Lemalign"
-              className="w-auto h-fit  my-0 object-fill"
+              loading="lazy"
+              width="400"
+              height="auto"
+              className="w-full max-w-md object-cover"
             />
           </div>
         </div>

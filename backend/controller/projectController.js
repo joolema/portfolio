@@ -7,9 +7,10 @@ const fs = require("fs").promises; // For file cleanup
 // @access  Private (you might want to add authentication middleware)
 const createProject = async (req, res) => {
   try {
-    let image, cloudinaryId;
-    console.log(req.file);
-    console.log(req.body);
+    let categories = [];
+    let uploadedImages = [];
+    console.log("project file", req.files);
+    console.log(" body project", req.body);
     const { title, description, category } = req.body;
     if (!title || !description || !category) {
       return res.status(400).json({
@@ -18,8 +19,14 @@ const createProject = async (req, res) => {
         error: "missing fields",
       });
     }
+    if (category && typeof category == "string") {
+      categories = category.split(",").map((c) => c.trim());
+    } else if (!Array.isArray(category)) {
+      category = [];
+    }
+
     // Handle image upload
-    if (!req.file) {
+    if (!req.files) {
       return res.status(400).json({
         success: false,
         error: "Project must have at least one image",
@@ -27,16 +34,27 @@ const createProject = async (req, res) => {
     }
 
     try {
-      const result = await cloudinary.uploader.upload(req.file.path);
-      image = result.secure_url;
-      cloudinaryId = result.public_id;
+      uploadedImages = [];
+      if (req.files && req.files.length > 0) {
+        for (const file of req.files) {
+          const result = await cloudinary.uploader.upload(file.path, {
+            folder: "projects",
+          });
+          uploadedImages.push({
+            image: result.secure_url,
+            cloudinaryId: result.public_id,
+          });
+        }
+      }
     } catch (uploadError) {
       console.error("Cloudinary upload failed:", uploadError);
-      await fs
-        .unlink(req.file.path)
-        .catch((err) =>
-          console.error("Failed to delete temp file:", err.message)
-        );
+      for (const file of req.files) {
+        await fs
+          .unlink(file.path)
+          .catch((err) =>
+            console.error("Failed to delete temp file:", err.message)
+          );
+      }
       return res.status(400).json({
         success: false,
         error: "Image upload failed. Please try again.",
@@ -44,20 +62,23 @@ const createProject = async (req, res) => {
     }
 
     // Clean up temporary file after successful upload
-    await fs
-      .unlink(req.file.path)
-      .catch((err) =>
-        console.error("Failed to delete temp file:", err.message)
-      );
 
-    // Create the project (rely on Mongoose validators)
-    const project = await Project.create({
+    for (const file of req.files) {
+      await fs
+        .unlink(file.path)
+        .catch((err) =>
+          console.error("Failed to delete temp file:", err.message)
+        );
+    }
+    const data = {
       title: title,
       description: description,
-      category: category,
-      image,
-      cloudinaryId,
-    });
+      category: categories,
+      images: uploadedImages,
+    };
+    console.log("data", data);
+    // Create the project (rely on Mongoose validators)
+    const project = await Project.create(data);
 
     res.status(201).json({
       success: true,

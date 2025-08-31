@@ -6,21 +6,23 @@ import { useNavigate } from "react-router-dom";
 const CreateProjectForm = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+  //console.log("auth stat", isAuthenticated);
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/login");
     }
   }, [isAuthenticated]);
+
   const onCancel = () => {
     navigate("/admin");
   };
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    category: [""],
+    category: "",
   });
-  const [imageFile, setImageFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState("");
+  const [imageFile, setImageFile] = useState([]);
+  const [imagePreview, setImagePreview] = useState([]);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -45,21 +47,16 @@ const CreateProjectForm = () => {
         "Description can only contain letters, numbers, spaces, and common punctuation";
     }
 
-    if (
-      formData.category.length === 0 ||
-      formData.category.every((cat) => !cat.trim())
-    ) {
-      newErrors.category = "At least one category is required";
-    } else if (formData.category.some((cat) => cat.length > 50)) {
-      newErrors.category = "Each category must be less than 50 characters";
-    }
-
-    if (imageFile) {
-      if (!imageFile.type.startsWith("image/")) {
-        newErrors.image = "Please select a valid image file (e.g., .jpg, .png)";
-      } else if (imageFile.size > 10 * 1024 * 1024) {
-        newErrors.image = "Image file size must be less than 10MB";
-      }
+    if (imageFile.length === 0) {
+      newErrors.image = "At least one image is required";
+    } else {
+      imageFile.forEach((file) => {
+        if (!file.type.startsWith("image/")) {
+          newErrors.image = "All files must be valid image types";
+        } else if (file.size > 10 * 1024 * 1024) {
+          newErrors.image = "Each image must be less than 10MB";
+        }
+      });
     }
 
     setErrors(newErrors);
@@ -67,32 +64,11 @@ const CreateProjectForm = () => {
   };
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setImageFile(file);
-    if (file && file.type.startsWith("image/")) {
-      setImagePreview(URL.createObjectURL(file));
-    } else {
-      setImagePreview("");
-    }
-  };
-
-  const handleCategoryChange = (index, value) => {
-    const newCategories = [...formData.category];
-    newCategories[index] = value;
-    setFormData({ ...formData, category: newCategories });
-  };
-
-  const addCategory = () => {
-    setFormData({ ...formData, category: [...formData.category, ""] });
-  };
-
-  const removeCategory = (index) => {
-    if (formData.category.length > 1) {
-      setFormData({
-        ...formData,
-        category: formData.category.filter((_, i) => i !== index),
-      });
-    }
+    const files = Array.from(e.target.files);
+    const images = files.filter((file) => file.type.startsWith("image/"));
+    setImageFile(images);
+    const previews = images.map((image) => URL.createObjectURL(image));
+    setImagePreview(previews);
   };
 
   const handleSubmit = async (e) => {
@@ -104,11 +80,11 @@ const CreateProjectForm = () => {
       const dataToSend = new FormData();
       dataToSend.append("title", formData.title);
       dataToSend.append("description", formData.description);
-      formData.category
-        .filter((cat) => cat.trim())
-        .forEach((cat) => dataToSend.append("category[]", cat));
-      dataToSend.append("image", imageFile);
-
+      dataToSend.append("category", formData.category);
+      imageFile.forEach((file) => {
+        dataToSend.append("images", file);
+      });
+      console.log("data sent on create ", dataToSend);
       await api.post("/api/project", dataToSend, {
         headers: {
           timeout: 30000,
@@ -173,33 +149,18 @@ const CreateProjectForm = () => {
           <label className="block text-sm font-medium text-[#FAAD1B]">
             Categories
           </label>
-          {formData.category.map((cat, index) => (
-            <div key={index} className="flex items-center mt-1">
-              <input
-                type="text"
-                value={cat}
-                onChange={(e) => handleCategoryChange(index, e.target.value)}
-                placeholder="e.g. design, illustration..."
-                className="block w-full rounded-md border-[#242424] bg-[#242424] text-white shadow-sm focus:border-[#22304C] focus:ring focus:ring-[#22304C] focus:ring-opacity-50"
-              />
-              {formData.category.length > 1 && (
-                <button
-                  type="button"
-                  onClick={() => removeCategory(index)}
-                  className="ml-2 text-red-600 hover:text-red-800"
-                >
-                  Remove
-                </button>
-              )}
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={addCategory}
-            className="mt-2 text-[#FAAD1B] hover:text-[#22304C]"
-          >
-            Add Category
-          </button>
+
+          <div className="flex items-center mt-1">
+            <input
+              type="text"
+              value={formData.category}
+              onChange={(e) =>
+                setFormData({ ...formData, category: e.target.value })
+              }
+              placeholder="e.g. design, illustration..."
+              className="block w-full rounded-md border-[#242424] bg-[#242424] text-white shadow-sm focus:border-[#22304C] focus:ring focus:ring-[#22304C] focus:ring-opacity-50"
+            />
+          </div>
           {errors.category && (
             <p className="mt-1 text-sm text-red-600">{errors.category}</p>
           )}
@@ -209,22 +170,25 @@ const CreateProjectForm = () => {
           <label className="block text-sm font-medium text-[#FAAD1B]">
             Image
           </label>
-          {imagePreview && (
-            <img
-              src={imagePreview}
-              alt="Preview"
-              className="mt-2 mb-2 max-w-xs"
-            />
-          )}
+
           <input
             type="file"
-            id="image"
-            name="image"
+            id="images"
+            name="images"
             multiple
             accept="image/*"
             onChange={handleImageChange}
             className="mt-1 block w-full rounded-md border-[#242424] bg-[#242424] text-white shadow-sm focus:border-[#22304C] focus:ring focus:ring-[#22304C] focus:ring-opacity-50"
           />
+          <div className="preview">
+            {imagePreview.map((preview, index) => (
+              <img
+                src={preview}
+                key={index}
+                className="w-32 h-32 object-cover rounded"
+              />
+            ))}
+          </div>
           {errors.image && (
             <p className="mt-1 text-sm text-red-600">{errors.image}</p>
           )}

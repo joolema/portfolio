@@ -18,44 +18,50 @@ const ResetPassword = ({ onBack }) => {
     } catch (error) {
       setMessage(error?.response?.data?.error || "failed to send reset link");
     }
+    setTimeout(() => {
+      setMessage("");
+    }, 3000);
   };
 
   return (
-    <div className="container mx-auto p-4 max-w-md">
-      <h1 className="text-2xl font-bold mb-6 text-center">Reset Password</h1>
-      <div className="p-4 bg-gray-100 rounded-lg shadow">
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-2 mb-2 border rounded"
-        />
-        {message && (
-          <p
-            className={
-              message.includes("sent")
-                ? "text-green-500 mb-2"
-                : "text-red-500 mb-2"
-            }
-          >
-            {message}
-          </p>
-        )}
-        <button
-          onClick={handleResetPassword}
-          className="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
-          Send Reset Link
-        </button>
-        <div className="mt-4 text-center">
+    <div className="w-full">
+      <div className=" bg-[var(--gray)] w-full sm:w-[50] rounded-2xl mt-20 container mx-auto p-4 max-w-md">
+        <h1 className="text-2xl font-bold mb-6 text-center">Reset Password</h1>
+        <form className="p-4 bg-[var*(--gray)] rounded-lg shadow">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            required
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full p-2 mb-2 border border-gray-50 text-gray-50 rounded"
+          />
+          {message && (
+            <p
+              className={
+                message.includes("sent")
+                  ? "text-green-500 mb-2"
+                  : "text-red-500 mb-2"
+              }
+            >
+              {message}
+            </p>
+          )}
           <button
-            onClick={() => navigate("/login")}
-            className="text-blue-500 hover:underline"
+            onClick={handleResetPassword}
+            className="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
           >
-            Back to Login
+            Send Reset Link
           </button>
-        </div>
+          <div className="mt-4 text-center">
+            <button
+              onClick={() => navigate("/login")}
+              className="text-blue-500 hover:underline"
+            >
+              Back to Login
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
