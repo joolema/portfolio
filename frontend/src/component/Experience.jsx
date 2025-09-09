@@ -4,7 +4,7 @@ const Experience = () => {
   return (
     <section id="edu" className=" w-[100%] items-center mt-8">
       {/* Work Grid */}
-      <div className=" w-[60%] sm:w-[40%] sm:h-[400px] flex items-center   mx-auto px-8  bg-[var(--dark-blue)]  rounded-xl">
+      <div className=" w-[60%] sm:w-[40%] sm:h-[400px] flex items-center   mx-auto px-8  bg-black/30  rounded-xl">
         <div className=" flex flex-col gap-2 w-fit mx-auto  ">
           <div className="flex ml-2 mx-auto ">
             <div className="border-2 border-white relative right-2 mt-5  w-3 h-3 rounded-full"></div>

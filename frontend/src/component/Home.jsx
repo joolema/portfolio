@@ -1,8 +1,6 @@
-import React from "react";
-
 function Home() {
   return (
-    <section className="bg-black py-0 w-full relative">
+    <section className="bg-black py-0 w-full relative h-screen">
       <div className="filler h-16"></div>
       <div>
         <div className="w-[75%] mx-auto flex flex-col md:flex-row justify-between items-center clip-sec relative ">
@@ -29,8 +27,7 @@ function Home() {
                 Yohannis Lemalign,
                 <br />
               </span>{" "}
-              Architecture Student &<br /> Graphic Designer <br />
-              from Ethiopia{" "}
+              Architecture Student &<br /> Graphic Designer
             </h1>
             <p className="text-gray-50 mb-4 text-xs md:text-sm font-stretch-normal">
               I`m an experienced Graphic Designer with 5+ years in the field,
@@ -39,14 +36,8 @@ function Home() {
             </p>
             <div className="flex flex-wrap gap-4">
               <a
-                href="#projects"
-                className="text-gray-50 bg-[var(--blue)] rounded-2xl px-4 h-8"
-              >
-                View My portfolio
-              </a>
-              <a
-                href="#contact"
-                className="border border-gray-50 text-gray-50 rounded-2xl h-8 px-4"
+                href="/contact"
+                className="border-[1.5px] border-[var(--orange)] text-gray-50 rounded-md h-8 px-6"
               >
                 Hire Me
               </a>

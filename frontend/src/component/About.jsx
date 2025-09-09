@@ -62,7 +62,7 @@ const About = () => {
   const [isHovered, setIsHovered] = useState(false);
   return (
     <div
-      className="flex flex-col items-center bg-[#22304C] mb-0 pb-8"
+      className="flex flex-col items-center bg-[#22304C] mb-0 pb-8 h-screen"
       id="about"
     >
       {/* Full-width banner */}
@@ -97,7 +97,7 @@ const About = () => {
             work with a vision for the future.
           </p>
           {/*todo:the size of the text on full screen is too big*/}
-          <div className="flex justify-around gap-4">
+          <div className="flex justify-around gap-4 w-[50%]">
             <div className="flex-col text-center">
               <h1 className="text-[#FAAD1B] font-extrabold text-lg sm:text-xl">
                 100+
@@ -115,31 +115,10 @@ const About = () => {
               </p>
             </div>
           </div>
-          <div
-            onMouseOver={() => setIsHovered(true)}
-            onMouseOut={() => setIsHovered(false)}
-            className={`flex justify-between items-center  rounded-4xl p-0 py-1    ${
-              isHovered
-                ? "p-2 absolute bottom-1 w-[40%] bg-amber-50 "
-                : "w-[50%] bg-[#FAAD1B]"
-            }`}
-          >
-            <button className="ml-2 bg-[var(--blue)] w-[70%] rounded-4xl p-2 text-gray-50 text-sm sm:text-base">
+          <div>
+            <button className="ml-2 bg-[var(--blue)] border-[1.5px] border-[var(--orange)] w-[30%] rounded-xl p-2 text-gray-50 text-sm sm:text-base">
               Download CV
             </button>
-            <div
-              className={`rounded-full p-2 mr-2 ${
-                isHovered
-                  ? " bg-[var(--blue)] text-gray-50"
-                  : "bg-gray-50 text-[var(--blue)]"
-              }`}
-            >
-              {isHovered ? (
-                <MdArrowDownward className="text-xl sm:text-2xl " />
-              ) : (
-                <MdArrowForward className="text-xl sm:text-2xl " />
-              )}
-            </div>
           </div>
         </div>
       </div>

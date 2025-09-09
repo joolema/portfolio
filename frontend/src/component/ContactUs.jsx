@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Head from "./Head";
 import api from "../api/api";
 import {
   FaPhone,
@@ -51,8 +52,13 @@ const ContactUs = () => {
     }
   };
   return (
-    <section id="contact" className="bg-[var(--black)] w-full mx-auto">
-      <div className="flex flex-col md:flex-row  lg:flex-row items-stretch justify-center w-[80%] mx-auto rounded-4xl ">
+    <section
+      id="contact"
+      className="bg-[var(--black)] w-full mx-auto h-screen "
+    >
+      <Head />
+      <div className="filler h-32"></div>
+      <div className="flex flex-col md:flex-row  lg:flex-row items-stretch justify-center w-[80%] mx-auto rounded-4xl relative ">
         <div className="flex flex-col w-[80%] gap-4 justify-center md:w-[50%] lg:w-[40%] p-2">
           {/* bg-[var(--gray)]*/}
           <p className="text-[var(--orange)]">Contact Us</p>

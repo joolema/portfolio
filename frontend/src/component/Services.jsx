@@ -57,7 +57,10 @@ const Services = () => {
     }
   };
   return (
-    <section id="services" className="bg-[var(--black)] py-0 mt-0">
+    <section
+      id="services"
+      className="bg-[var(--black)] py-0 mt-0 h-screen flex flex-col items-center "
+    >
       <div className="w-[90%] sm:w-[80%] md:w-[70%] mx-auto ">
         <h1 className="text-[var(--orange)] text-2xl sm:text-3xl font-bold">
           Services
@@ -101,7 +104,6 @@ const Services = () => {
           ))}
         </div>
       </div>
-      <hr className="bottom-0 text-gray-50" />
     </section>
   );
 };

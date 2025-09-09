@@ -2,7 +2,7 @@ import React from "react";
 
 const Approach = () => {
   return (
-    <div className=" lg:flex-row flex flex-col items-center lg:h-[400px] h-fit gap-4 bg-[var(--dark-blue)] w-[60%] mx-auto p-4 mt-8 rounded-2xl text-amber-50">
+    <div className=" lg:flex-row flex flex-col items-center lg:h-[400px] h-fit gap-4 bg-black/30 w-[60%] mx-auto p-4 mt-8 rounded-2xl text-amber-50">
       <div className="flex flex-col ">
         <h1 className="text-2xl font-bold relative left-14">Define</h1>
 

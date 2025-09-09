@@ -55,16 +55,9 @@ const tools = [
 
 const ToolItem = ({ name, percentage, icon }) => (
   <div className=" flex  w-full justify-evenly items-center rounded-3xl hover:scale-105 transform transition duration-500 ">
-    <img
-      src={icon}
-      alt={name}
-      className=" sm:w-20 sm:h-20"
-      loading="lazy"
-      width={80}
-      height={80}
-    />
+    <img src={icon} alt={name} className="w-15 h-15" loading="lazy" />
     <div className="flex flex-col w-[70%]">
-      <p className="text-gray-400 font-light text-sm sm:text-xl w-fit">
+      <p className="text-gray-400 font-light text-md sm:text-md w-fit">
         {name}
       </p>
       <div className="w-full bg-gray-300 rounded-full ">
@@ -81,7 +74,7 @@ const FavTool = () => {
   return (
     <section
       id="edu"
-      className="bg-[var(--dark-blue)]  flex flex-col items-center justify-center w-[60%] mx-auto mt-8 sm:h-[400px] rounded-2xl"
+      className="bg-black/30  flex flex-col items-center justify-center w-[60%] mx-auto mt-8 sm:h-[400px] rounded-2xl"
     >
       <div>
         <div className="grid grid-cols-1 sm:grid-cols-2 w-full mx-auto">

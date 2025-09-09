@@ -3,7 +3,7 @@ import api from "../api/api";
 import { useProject } from "../context/projectContext";
 const ProjectCard = ({ title, description, images, category }) => {
   return (
-    <div className="bg-[var(--gray)] w-full h-auto sm-[40%] md:w-[30%] lg:w-[30%] flex flex-col items-center   shadow-lg  hover:scale-105 transition group">
+    <div className="bg-[var(--gray)] w-full  sm-[40%] md:w-[30%] lg:w-[30%] flex flex-col items-center   shadow-lg  hover:scale-105 transition group">
       <div className="w-full group-hover:opacity-50">
         <img
           className="w-full object-fill"
@@ -62,7 +62,7 @@ const Projects = () => {
   };
 
   return (
-    <section id="projects" className="bg-[var(--black)] py-12 mx-auto">
+    <section id="projects" className="bg-[var(--black)] py-12 mx-auto h-screen">
       <div className="flex flex-col items-center w-4/5 mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-2xl sm:text-3xl text-[var(--orange)]">

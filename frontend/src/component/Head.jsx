@@ -34,7 +34,7 @@ const Head = () => {
             Education & Work
           </a>
           <a
-            href="#contact"
+            href="contact"
             className="bg-gray-50 p-2 rounded-2xl text-gray-950 text-sm hover:text-blue-500"
           >
             Contact Me
