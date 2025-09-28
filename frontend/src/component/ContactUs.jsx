@@ -62,7 +62,8 @@ const ContactUs = () => {
   return (
     <section
       id="contact"
-      className="bg-[var(--blue)]/70  bg-[url('./other/bghouse.png')] flex items-center   sm:bg-[length:60%_100%] bg-right bg-no-repeat w-full mx-auto h-[100vh] relative "
+      className="bg-[var(--blue)]/70  
+      bg-[url('https://raw.githubusercontent.com/joolema/portfolio/91f0f829a417b9c8f12b92b941b999ff4cb973ae/frontend/public/other/bghouse.png')] flex items-center   sm:bg-[length:60%_100%] bg-right bg-no-repeat w-full mx-auto h-[100vh] relative "
     >
       <motion.div
         initial="hidden"
