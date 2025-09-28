@@ -1,106 +1,145 @@
-import { MdArrowDownward, MdArrowForward } from "react-icons/md";
-import { motion } from "framer-motion";
-import { useState } from "react";
-const BannerContent = () => {
-  return (
-    <div className="w-full flex flex-wrap justify-center gap-2 sm:gap-4 items-center h-auto sm:h-12 bg-[#FAAD1B] py-2 sm:py-0 px-4">
-      <img
-        src="https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485287/image_wu05xs.png"
-        alt="star shape"
-        className="w-6 sm:w-8"
-        loading="lazy"
-      />
-      <h1 className="text-[#242424] font-semibold text-base sm:text-lg md:text-xl">
-        Architecture Student
-      </h1>
-      <img
-        src="https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485287/image_wu05xs.png"
-        alt="star shape"
-        className="w-6 sm:w-8"
-        loading="lazy"
-      />
-      <h1 className="text-[#242424] font-semibold text-base sm:text-lg md:text-xl">
-        Graphic Designer
-      </h1>
-      <img
-        src="https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485287/image_wu05xs.png"
-        alt="star shape"
-        className="w-6 sm:w-8"
-        loading="lazy"
-      />
-      <h1 className="text-[#242424] font-semibold text-base sm:text-lg md:text-xl">
-        Logo & Identity
-      </h1>
-    </div>
-  );
+import {
+  motion,
+  useMotionValue,
+  useInView,
+  animate,
+  easeOut,
+} from "framer-motion";
+import { useRef, useEffect, useState } from "react";
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      duration: 1,
+      staggerChildren: 0.3,
+      ease: easeOut,
+    },
+  },
+};
+const childVariant = {
+  hidden: { opacity: 0, y: 50 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: easeOut,
+    },
+  },
+};
+const childVariant2 = {
+  hidden: { opacity: 0, x: -50 },
+  show: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.5,
+      ease: easeOut,
+    },
+  },
 };
 
-const Banner = () => {
-  return (
-    <div className="w-full overflow-hidden bg-[#FAAD1B] py-2 sm:py-0 px-4">
-      <motion.div
-        className="flex min-w-max items-center gap-6 sm:gap-10"
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{
-          repeat: Infinity,
-          repeatType: "loop",
-          ease: "linear",
-          duration: 20,
-        }}
-      >
-        {/* Duplicated content for continuous scroll */}
-        <BannerContent />
-        <BannerContent />
-        <BannerContent />
-        <BannerContent />
-      </motion.div>
-    </div>
-  );
-};
+const Counter = ({ from = 0, to, duration = 2 }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: false });
+  const motionValue = useMotionValue(from);
+  const [value, setValue] = useState(from);
 
+  // Update React state on motion value change
+  useEffect(() => {
+    const unsubscribe = motionValue.on("change", (latest) => {
+      setValue(Math.floor(latest));
+    });
+    return () => unsubscribe();
+  }, [motionValue]);
+
+  // Animate whenever the element enters view
+  useEffect(() => {
+    if (isInView) {
+      const controls = animate(motionValue, to, {
+        duration,
+        ease: "easeOut",
+      });
+      return controls.stop; // stop animation if unmounted
+    } else {
+      motionValue.set(from); // reset when out of view
+    }
+  }, [isInView, motionValue, to, from, duration]);
+
+  return <span ref={ref}>{value}+</span>;
+};
+const handleDownload = () => {
+  const link = document.createElement("a");
+  link.href = "/files/YohannesPortfolio.pdf"; // file in public/
+  link.download = "YohannesPortfolio.pdf"; // suggested filename
+  link.click();
+};
 const About = () => {
   const [isHovered, setIsHovered] = useState(false);
   return (
     <div
-      className="flex flex-col items-center bg-[#22304C] mb-0 pb-8 h-screen"
+      className="flex flex-col items-center bg-[#22304C] mb-0 pb-8 w-[100%]"
       id="about"
     >
-      {/* Full-width banner */}
-      <Banner />
-
       {/* Content container with 80% width */}
-      <div className="w-[80%] flex flex-col md:flex-row gap-4 sm:gap-6 mt-4 sm:mt-6">
+      <div className="w-[80%] flex flex-col md:flex-row gap-4 sm:gap-6 mt-4 sm:mt-6 ">
         {/* Image section */}
-        <div className="w-2/3 h-auto md:w-1/2 mx-auto flex justify-center">
-          <img
+        <motion.div
+          initial="hidden"
+          whileInView="show"
+          variants={containerVariants}
+          className="w-2/3 h-auto md:w-1/2 mx-auto flex justify-center"
+        >
+          <motion.img
+            variants={childVariant2}
+            initial="hidden"
+            whileInView="show"
             className="w-full sm:w-3/4 md:w-2/3 max-w-xs h-auto"
             src="https://res.cloudinary.com/dq4kdrhto/image/upload/v1753026799/Untitled-1_hxh51j.webp"
             alt="Yohannis Lemalign"
             loading="lazy"
           />
-        </div>
+        </motion.div>
 
         {/* Text section */}
-        <div className="w-full md:w-1/2 flex flex-col space-y-4 sm:space-y-6 relative">
-          <h2 className="text-lg sm:text-xl md:text-2xl font-light text-gray-50">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="show"
+          className="w-full md:w-1/2 flex flex-col space-y-4 sm:space-y-6 relative"
+        >
+          <motion.h2
+            variants={childVariant}
+            className="text-lg sm:text-xl md:text-2xl font-light text-gray-50"
+          >
             About Me
-          </h2>
-          <h1 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-50">
+          </motion.h2>
+          <motion.h1
+            variants={childVariant}
+            className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-50"
+          >
             Who is <span className="text-[#FAAD1B]">Yohannis Lemalign?</span>
-          </h1>
-          <p className="text-gray-50 font-light text-xs sm:text-base">
+          </motion.h1>
+          <motion.p
+            variants={childVariant}
+            className="text-gray-50 font-light text-xs sm:text-base"
+          >
             I am an undergraduate architecture student at Adama Science and
             Technology University (A.S.T.U.). I see every project as a personal
             challenge to grow and improve. Currently, I am seeking an internship
             at a reputable architecture firm where I can collaborate with
             experienced professionals and contribute to impactful architectural
             work with a vision for the future.
-          </p>
-          {/*todo:the size of the text on full screen is too big*/}
-          <div className="flex justify-around gap-4 w-[50%]">
+          </motion.p>
+
+          <motion.div
+            variants={childVariant}
+            className="flex justify-start gap-4"
+          >
             <div className="flex-col text-center">
               <h1 className="text-[#FAAD1B] font-extrabold text-lg sm:text-xl">
-                100+
+                <Counter to={100} />
               </h1>
               <p className="text-gray-50 font-light text-xs sm:text-sm">
                 Project Completed
@@ -108,19 +147,29 @@ const About = () => {
             </div>
             <div className="flex-col text-center">
               <h1 className="text-[#FAAD1B] font-extrabold text-lg sm:text-xl">
-                5+
+                <Counter to={5} />
               </h1>
               <p className="text-gray-50 font-light text-xs sm:text-sm">
                 Years of Experience
               </p>
             </div>
-          </div>
-          <div>
-            <button className="ml-2 bg-[var(--blue)] border-[1.5px] border-[var(--orange)] w-[30%] rounded-xl p-2 text-gray-50 text-sm sm:text-base">
+          </motion.div>
+
+          <motion.button
+            variants={childVariant}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            className="ml-2 bg-[var(--blue)] w-[30%] items-center rounded-md border-[var(--orange)] border-[1.5px] px-2 py-1 text-gray-50 text-sm sm:text-base"
+          >
+            <a
+              href="https://raw.githubusercontent.com/joolema/portfolio/32fc5e2b9dc6feb833601c17962d4136aaf8040f/frontend/YohannesPortfolio.pdf
+"
+              download={true}
+            >
               Download CV
-            </button>
-          </div>
-        </div>
+            </a>
+          </motion.button>
+        </motion.div>
       </div>
     </div>
   );

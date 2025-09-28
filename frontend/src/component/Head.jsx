@@ -8,13 +8,13 @@ const Head = () => {
   };
 
   return (
-    <div className="w-full fixed flex justify-center bg-black p-4  shadow-md z-30">
+    <div className="w-full fixed flex justify-center bg-black p-4  shadow-md z-30 2xl:text-4xl">
       <header className=" w-[80%]  flex justify-between items-center ">
         <div className="logo flex items-center">
           <img
-            src="https://res.cloudinary.com/dq4kdrhto/image/upload/v1751485308/ylogo_tm4tmx.png"
+            src="https://res.cloudinary.com/dq4kdrhto/image/upload/v1758103858/logo_02_xaxq88.webp"
             alt="Your Brand Logo"
-            className="w-32 md:w-44 m-0 p-0"
+            className="w-62 md:w-84  m-0 p-0"
           />
         </div>
         <nav className="hidden md:flex gap-6 items-center">
@@ -30,14 +30,20 @@ const Head = () => {
           >
             Services
           </a>
+          <a
+            href="#projects"
+            className="text-gray-50 text-sm hover:text-blue-500"
+          >
+            Projects
+          </a>
           <a href="#edu" className="text-gray-50 text-sm hover:text-blue-500">
-            Education & Work
+            Education
           </a>
           <a
-            href="contact"
+            href="#contact"
             className="bg-gray-50 p-2 rounded-2xl text-gray-950 text-sm hover:text-blue-500"
           >
-            Contact Me
+            Contact
           </a>
         </nav>
         <button
@@ -89,18 +95,25 @@ const Head = () => {
             Services
           </a>
           <a
+            href="#projects"
+            className="text-gray-50 text-sm hover:text-blue-500"
+            onClick={toggleMenu}
+          >
+            Projects
+          </a>
+          <a
             href="#edu"
             className="text-gray-50 text-sm hover:text-blue-500"
             onClick={toggleMenu}
           >
-            Education & Work
+            Education
           </a>
           <a
-            href="#contact"
-            className="bg-gray-50 p-2 rounded-2xl text-gray-950 text-sm hover:text-blue-500 text-center"
+            href="contact"
             onClick={toggleMenu}
+            className="bg-gray-50 p-2 rounded-2xl text-gray-950 text-sm hover:text-blue-500"
           >
-            Contact Me
+            Contact
           </a>
         </div>
       </header>

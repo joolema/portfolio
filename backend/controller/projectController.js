@@ -9,8 +9,7 @@ const createProject = async (req, res) => {
   try {
     let categories = [];
     let uploadedImages = [];
-    console.log("project file", req.files);
-    console.log(" body project", req.body);
+
     const { title, description, category } = req.body;
     if (!title || !description || !category) {
       return res.status(400).json({

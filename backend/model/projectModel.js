@@ -74,14 +74,8 @@ const projectSchema = new mongoose.Schema(
         },
       },
     ],
-
-    visible: {
-      type: Boolean,
-      required: true,
-      default: true,
-    },
   },
   { timestamps: true }
 );
-
+//todo:project only takes one image and one category fix it to match this update
 module.exports = mongoose.model("Project", projectSchema);

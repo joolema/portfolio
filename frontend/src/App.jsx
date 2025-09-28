@@ -9,6 +9,7 @@ const Services = lazy(() => import("./component/Services"));
 const ContactUs = lazy(() => import("./component/ContactUs"));
 const Projects = lazy(() => import("./component/Projects"));
 const Container = lazy(() => import("./component/Container"));
+const Footer = lazy(() => import("./component/Footer"));
 // admin
 const Login = lazy(() => import("./admin/Login"));
 const CreateProjectForm = lazy(() => import("./admin/CreateProjectForm"));
@@ -34,6 +35,8 @@ const Portfolio = () => {
         <Services />
         <hr className="text-amber-50" />
         <Projects />
+        <ContactUs />
+        <Footer />
       </Suspense>
     </ProjectProvider>
   );
@@ -57,7 +60,6 @@ const App = () => {
           <Route path="/change" element={<ChangePassword />} />
           <Route path="/reset" element={<ResetPassword />} />
           <Route path="/admin" element={<ProjectList />} />
-          <Route path="/contact" element={<ContactUs />} />
           <Route path="*" element={<Portfolio />} />
         </Routes>
       </Suspense>
