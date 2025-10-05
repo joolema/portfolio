@@ -31,9 +31,7 @@ const Portfolio = () => {
         <Home />
         <About />
         <Container />
-        <hr className="text-amber-50" />
         <Services />
-        <hr className="text-amber-50" />
         <Projects />
         <ContactUs />
         <Footer />

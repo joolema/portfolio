@@ -8,27 +8,28 @@ export const ProjectProvider = ({ children }) => {
   const [projects, setProjects] = useState([]);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-
+  const fetchProjects = async () => {
+    try {
+      const response = await api.get("api/project");
+      setProjects(response.data.data);
+    } catch (error) {
+      setError(
+        error.message ||
+          error.error ||
+          "failed to load projects. try again later"
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const response = await api.get("api/project");
-        setProjects(response.data.data);
-      } catch (error) {
-        setError(
-          error.message ||
-            error.error ||
-            "failed to load projects. try again later"
-        );
-      } finally {
-        setIsLoading(false);
-      }
-    };
     fetchProjects();
   }, []);
 
   return (
-    <ProjectContext.Provider value={{ projects, isLoading, error }}>
+    <ProjectContext.Provider
+      value={{ projects, isLoading, error, fetchProjects }}
+    >
       {children}
     </ProjectContext.Provider>
   );

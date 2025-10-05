@@ -63,12 +63,13 @@ const ContactUs = () => {
     <section
       id="contact"
       className="bg-[var(--blue)]/70  
-      bg-[url('https://raw.githubusercontent.com/joolema/portfolio/91f0f829a417b9c8f12b92b941b999ff4cb973ae/frontend/public/other/bghouse.png')] flex items-center   sm:bg-[length:60%_100%] bg-right bg-no-repeat w-full mx-auto h-[100vh] relative "
+      bg-[url('https://raw.githubusercontent.com/joolema/portfolio/91f0f829a417b9c8f12b92b941b999ff4cb973ae/frontend/public/other/bghouse.png')]
+      flex items-center   sm:bg-[length:60%_100%] bg-right bg-no-repeat  mx-auto w-full min-h-screen p-16  relative "
     >
       <motion.div
         initial="hidden"
         whileInView={"show"}
-        className="flex flex-col bg-[var(--blue)]  items-stretch justify-center w-[35%] ml-[20%] py-3  rounded-4xl relative "
+        className="flex flex-col bg-[var(--blue)]  items-stretch justify-center w-full md:w-[45%] lg:w-[35%] ml-[20%] py-3  rounded-4xl relative "
       >
         {/* bg-[var(--gray)]*/}
 
@@ -92,7 +93,7 @@ const ContactUs = () => {
           whileInView={"show"}
           variants={containerVariant}
           onSubmit={handleSubmit}
-          className="grid grid-col-1 m-auto w-[70%] sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 [&_input]:bg-black/30 [&_select]:bg-black/30 [&_textarea]:bg-black/30 [&_div]:hover:scale-120"
+          className="grid grid-col-1 mx-auto w-fit sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 [&_input]:bg-black/30 [&_select]:bg-black/30 [&_textarea]:bg-black/30 [&_div]:hover:scale-120"
         >
           <motion.div
             variants={childVariant}
@@ -114,7 +115,7 @@ const ContactUs = () => {
           </motion.div>
           <motion.div
             variants={childVariant}
-            className="flex flex-col py-1 px-2"
+            className="flex flex-col py-1 px-2 "
           >
             <label className="text-xs text-gray-50 font-light ml-2">
               {" "}
@@ -124,15 +125,25 @@ const ContactUs = () => {
               className=" text-xs text-gray-400   rounded-sm p-1"
               id="options"
               name="interest"
-              placeholder="select"
+              required
               value={formData.interest}
               onChange={handleChange}
             >
-              <option value="">select</option>
-              <option value="Hire">Hire</option>
-              <option value="Collaborate">Collaborate</option>
-              <option value="Advice">Advice</option>
-              <option value="Other">Other</option>
+              <option className="bg-[var(--blue)]" value="">
+                select
+              </option>
+              <option className="bg-[var(--blue)]" value="Hire">
+                Hire
+              </option>
+              <option className="bg-[var(--blue)]" value="Collaborate">
+                Collaborate
+              </option>
+              <option className="bg-[var(--blue)]" value="Advice">
+                Advice
+              </option>
+              <option className="bg-[var(--blue)]" value="Other">
+                Other
+              </option>
             </select>
           </motion.div>
           <motion.div
@@ -160,14 +171,13 @@ const ContactUs = () => {
             <label className="text-xs text-gray-50 font-light ml-2">
               {" "}
               Country{" "}
-              <span className="text-gray-300 text-[0.825em] text-opacity-50%">
-                (optional)
+              <span className="text-red-500 text-[1em] text-opacity-50%">
+                *
               </span>
             </label>
             <input
               type="text"
               name="country"
-              required
               value={formData.country}
               onChange={handleChange}
               placeholder="place of residence"

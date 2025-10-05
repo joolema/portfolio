@@ -23,7 +23,7 @@ const childVariant = {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.5,
+      duration: 1,
       ease: easeOut,
     },
   },
@@ -79,7 +79,7 @@ const About = () => {
   const [isHovered, setIsHovered] = useState(false);
   return (
     <div
-      className="flex flex-col items-center bg-[#22304C] mb-0 pb-8 w-[100%]"
+      className="flex flex-col items-center bg-[#22304C] mb-0 pb-8 w-full h-fit xl:h-[100dvh]"
       id="about"
     >
       {/* Content container with 80% width */}

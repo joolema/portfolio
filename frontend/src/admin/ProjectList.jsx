@@ -100,10 +100,9 @@ const ProjectList = () => {
                 key={project._id}
                 className="border border-amber-50 bg-[#000000] rounded-lg shadow-md p-4 flex flex-col md:flex-row gap-4"
               >
-                {console.log(project.visible)}
-                {project.images && (
+                {project.image && (
                   <img
-                    src={project.images[0].image}
+                    src={project.image.url}
                     alt={project.title}
                     className="w-full md:w-32 h-32 object-cover rounded-md"
                   />
@@ -115,15 +114,12 @@ const ProjectList = () => {
                   <p className="text-amber-50 mt-1">{project.description}</p>
                   <div className="mt-2">
                     <span className="text-sm font-medium text-[#FAAD1B]">
-                      Categories:{" "}
+                      Category:{" "}
                     </span>
                     <span className="text-sm text-amber-50">
-                      {project.category.join(", ")}
+                      {project.category}
                     </span>
                   </div>
-                  <p className="text-amber-50 mt-1">
-                    visible: {project.visible.toString()}
-                  </p>
                 </div>
                 <div className="flex space-x-2 self-end md:self-start">
                   <button

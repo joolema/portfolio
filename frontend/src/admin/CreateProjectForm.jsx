@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import api from "../api/api";
 import BackButton from "../component/BackButton";
 import { useAuth } from "../context/authContext";
+import { useProject } from "../context/projectContext";
 import { useNavigate } from "react-router-dom";
 const CreateProjectForm = () => {
+  const { fetchProjects } = useProject();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   //console.log("auth stat", isAuthenticated);
@@ -21,8 +23,8 @@ const CreateProjectForm = () => {
     description: "",
     category: "",
   });
-  const [imageFile, setImageFile] = useState([]);
-  const [imagePreview, setImagePreview] = useState([]);
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -50,13 +52,11 @@ const CreateProjectForm = () => {
     if (imageFile.length === 0) {
       newErrors.image = "At least one image is required";
     } else {
-      imageFile.forEach((file) => {
-        if (!file.type.startsWith("image/")) {
-          newErrors.image = "All files must be valid image types";
-        } else if (file.size > 10 * 1024 * 1024) {
-          newErrors.image = "Each image must be less than 10MB";
-        }
-      });
+      if (!imageFile.type.startsWith("image/")) {
+        newErrors.image = "All files must be valid image types";
+      } else if (imageFile.size > 10 * 1024 * 1024) {
+        newErrors.image = "Each image must be less than 10MB";
+      }
     }
 
     setErrors(newErrors);
@@ -64,11 +64,11 @@ const CreateProjectForm = () => {
   };
 
   const handleImageChange = (e) => {
-    const files = Array.from(e.target.files);
-    const images = files.filter((file) => file.type.startsWith("image/"));
-    setImageFile(images);
-    const previews = images.map((image) => URL.createObjectURL(image));
-    setImagePreview(previews);
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -81,17 +81,15 @@ const CreateProjectForm = () => {
       dataToSend.append("title", formData.title);
       dataToSend.append("description", formData.description);
       dataToSend.append("category", formData.category);
-      imageFile.forEach((file) => {
-        dataToSend.append("images", file);
-      });
-      console.log("data sent on create ", dataToSend);
+      dataToSend.append("image", imageFile);
+      //console.log("data sent on create ", dataToSend);
       await api.post("/api/project", dataToSend, {
         headers: {
-          timeout: 30000,
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
+      fetchProjects();
       navigate("/admin");
     } catch (error) {
       setErrors({
@@ -157,7 +155,7 @@ const CreateProjectForm = () => {
               onChange={(e) =>
                 setFormData({ ...formData, category: e.target.value })
               }
-              placeholder="e.g. design, illustration..."
+              placeholder="design"
               className="block w-full rounded-md border-[#242424] bg-[#242424] text-white shadow-sm focus:border-[#22304C] focus:ring focus:ring-[#22304C] focus:ring-opacity-50"
             />
           </div>
@@ -181,13 +179,12 @@ const CreateProjectForm = () => {
             className="mt-1 block w-full rounded-md border-[#242424] bg-[#242424] text-white shadow-sm focus:border-[#22304C] focus:ring focus:ring-[#22304C] focus:ring-opacity-50"
           />
           <div className="preview">
-            {imagePreview.map((preview, index) => (
+            {imagePreview && (
               <img
-                src={preview}
-                key={index}
+                src={imagePreview}
                 className="w-32 h-32 object-cover rounded"
               />
-            ))}
+            )}
           </div>
           {errors.image && (
             <p className="mt-1 text-sm text-red-600">{errors.image}</p>

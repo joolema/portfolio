@@ -92,26 +92,31 @@ const Services = () => {
         whileInView={"show"}
         variants={containerVariant}
         key={showing}
-        className="relative w-[80%] mx-auto mt-20"
+        className=" w-[65%] mx-auto mt-20"
       >
-        <button
-          onClick={handleShow}
-          className="bg-[var(--orange)] text-black rounded-md p-2  absolute  right-0 top-4 z-10 "
-        >
-          {showing ? "prev" : "next"}
-        </button>
-        <motion.h1
-          variants={childVariant}
-          className="text-4xl text-[var(--orange)]  translate w-[50%] sm:w-fit  "
-        >
-          Services
-        </motion.h1>
-        <motion.h2
-          variants={childVariant}
-          className="text-4xl text-amber-50 font-bold translate w-[50%] sm:w-fit  "
-        >
-          Services I Provide
-        </motion.h2>
+        <div className="flex justify-between items-center">
+          <div className="flex flex-col">
+            <motion.h1
+              variants={childVariant}
+              className="text-4xl text-[var(--orange)]   w-[50%] sm:w-fit  "
+            >
+              Services
+            </motion.h1>
+            <motion.h2
+              variants={childVariant}
+              className="text-4xl text-amber-50 font-bold  w-[50%] sm:w-fit  "
+            >
+              Services I Provide
+            </motion.h2>
+          </div>
+          <button
+            onClick={handleShow}
+            className="bg-[var(--orange)] text-black rounded-md px-2 py-0 w-16 h-12  "
+          >
+            {showing ? "prev" : "next"}
+          </button>
+        </div>
+
         <div className="columns-1 md:columns-2 lg:columns-3 gap-4 mt-14 items-center mx-auto  w-[100%]">
           {services
             .slice(showing ? 6 : 0, showing ? services.length : 6)
@@ -120,12 +125,12 @@ const Services = () => {
                 <motion.div
                   variants={childVariant}
                   key={idx}
-                  className="flex flex-col bg-black/30  p-8 text-amber-50 rounded-sm mb-4 "
+                  className="flex flex-col bg-black/30  p-8 text-amber-50 rounded-sm mb-4 h-44  "
                 >
                   <img
                     src={data.img}
                     alt={data.title}
-                    className="max-h-12 max-w-12 object-contain "
+                    className="h-12 w-12 object-contain "
                   />
                   <h3 className="font-bold">{data.title}</h3>
                   <p className="text-xs text-amber-50/40">{data.desc}</p>

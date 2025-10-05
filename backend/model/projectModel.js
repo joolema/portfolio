@@ -37,45 +37,40 @@ const projectSchema = new mongoose.Schema(
       ],
     },
     category: {
-      type: [String],
-      required: [true, "At least one category is required"],
-      default: ["design"],
+      type: String,
+      required: [true, "category is required"],
+      default: "design",
       validate: [
         {
-          validator: (arr) =>
-            Array.isArray(arr) &&
-            arr.length > 0 &&
-            arr.every((val) => validator.isLength(val, { min: 1, max: 50 })),
-          message: "Each category must be 1 to 50 characters long",
+          validator: (value) => validator.isLength(value, { min: 1, max: 50 }),
+          message: "category must be 1 to 50 characters long",
         },
         {
-          validator: (arr) =>
-            arr.every((val) => /^[A-Za-z0-9\s.,!?'"()-]*$/.test(val)),
-          message: "Each category must be alphanumeric and clean",
+          validator: (val) => /^[A-Za-z0-9\s.,!?'"()/-]*$/.test(val),
+          message: "category must be alphanumeric and clean",
         },
       ],
     },
-    images: [
-      {
-        image: {
-          type: String,
-          required: true,
-          validate: {
-            validator: (value) => validator.isURL(value),
-            message: "Image must be a valid URL",
-          },
-        },
-        cloudinaryId: {
-          type: String,
-          required: true,
-          validate: {
-            validator: (value) => /^[a-z]+\/[a-z0-9]+$/.test(value),
-          },
+    image: {
+      url: {
+        type: String,
+        required: true,
+        validate: {
+          validator: (value) => validator.isURL(value),
+          message: "Image must be a valid URL",
         },
       },
-    ],
+      cloudinaryId: {
+        type: String,
+        required: true,
+        validate: {
+          validator: (value) => value.length > 0 && !value.includes(" "),
+          message: "Cloudinary ID cannot be empty or contain spaces",
+        },
+      },
+    },
   },
   { timestamps: true }
 );
-//todo:project only takes one image and one category fix it to match this update
+
 module.exports = mongoose.model("Project", projectSchema);

@@ -12,13 +12,13 @@ const containerVariants = {
   show: {
     opacity: 1,
     x: 0,
-    transition: { duration: 0.2, staggerChildren: 0.3, ease: easeInOut },
+    transition: { duration: 0.5, staggerChildren: 0.3, ease: easeInOut },
   },
 };
 
 const childVariants = {
   hidden: { opacity: 0, y: -20 },
-  show: { opacity: 1, y: 0, transition: { ease: easeInOut } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: easeInOut } },
 };
 const childVariants2 = {
   hidden: { opacity: 0, y: -3, x: 3 },
@@ -54,7 +54,10 @@ const Container = () => {
     setView(views[prevIndex]);
   };
   return (
-    <div id="edu" className="w-[100%] h-fit  bg-[var(--blue)] mx-auto  py-10">
+    <div
+      id="edu"
+      className="w-full h-fit xl:h-[100dvh]  bg-[var(--blue)] mx-auto  py-10"
+    >
       <motion.div
         initial="hidden"
         whileInView="show"

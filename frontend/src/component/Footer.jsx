@@ -27,11 +27,11 @@ const Footer = () => {
         initial="hidden"
         whileInView={"show"}
         variants={containerVariant}
-        className="flex flex-col md:flex md:flex-row justify-around my-10"
+        className="flex flex-col mx-auto md:flex-row justify-around my-10 w-full"
       >
         <motion.div
           variants={childVariant}
-          className="flex flex-col gap-6 w-82 items-center"
+          className="flex flex-col gap-6 w-82 items-center mx-auto"
         >
           <img
             src="https://res.cloudinary.com/dq4kdrhto/image/upload/v1758103858/logo_02_xaxq88.webp"
@@ -39,57 +39,59 @@ const Footer = () => {
             className="w-62 md:w-84  my-auto p-0"
           />
         </motion.div>
-        <motion.div
-          variants={childVariant}
-          className="flex flex-col text-cm text-amber-50 gap-1 w-24"
-        >
-          <p className="text-2xl">Navigation </p>
-          <a
-            href="#home"
-            className="opacity-40 hover:opacity-100 hover:text-[var(--orange)]"
+        <div className="flex md:flex-row justify-between w-[70%] mt-6 md:mt-0 md:w-[40%] mx-auto">
+          <motion.div
+            variants={childVariant}
+            className="nav flex flex-col text-cm text-amber-50 gap-1 w-fit"
           >
-            {" "}
-            Home
-          </a>
-          <a
-            href="#services"
-            className="opacity-40 hover:opacity-100 hover:text-[var(--orange)]"
+            <p className="text-2xl">Navigation </p>
+            <a
+              href="#home"
+              className="opacity-40 hover:opacity-100 hover:text-[var(--orange)]"
+            >
+              {" "}
+              Home
+            </a>
+            <a
+              href="#services"
+              className="opacity-40 hover:opacity-100 hover:text-[var(--orange)]"
+            >
+              Services
+            </a>
+            <a
+              href="#about"
+              className="opacity-40 hover:opacity-100 hover:text-[var(--orange)]"
+            >
+              About{" "}
+            </a>
+            <a
+              href="#projects"
+              className="opacity-40 hover:opacity-100 hover:text-[var(--orange)]"
+            >
+              projects
+            </a>
+          </motion.div>
+          <motion.div
+            variants={childVariant}
+            className="cont flex flex-col text-sm text-amber-50  gap-2 w-fit"
           >
-            Services
-          </a>
-          <a
-            href="#about"
-            className="opacity-40 hover:opacity-100 hover:text-[var(--orange)]"
-          >
-            About{" "}
-          </a>
-          <a
-            href="#projects"
-            className="opacity-40 hover:opacity-100 hover:text-[var(--orange)]"
-          >
-            projects
-          </a>
-        </motion.div>
-        <motion.div
-          variants={childVariant}
-          className="flex flex-col text-sm text-amber-50  gap-2 w-52"
-        >
-          <p className="text-2xl">Contact </p>
-          <p className=" text-md">
-            Phone:
-            <span className="opacity-40 "> +251977377440</span>
-          </p>
-          <p className=" text-md">
-            Email:
-            <span className="opacity-40 "> yohanneslemalign@gmail.com</span>
-          </p>
-          <p className=" text-md">
-            Linkedin:<span className="opacity-40 "> Yohannis Lemalign</span>
-          </p>
-        </motion.div>
+            <p className="text-2xl">Contact </p>
+            <p className=" text-md">
+              Phone:
+              <span className="opacity-40 "> +251977377440</span>
+            </p>
+            <p className=" text-md">
+              Email:
+              <span className="opacity-40 "> yohanneslemalign@gmail.com</span>
+            </p>
+            <p className=" text-md">
+              Linkedin:<span className="opacity-40 "> Yohannis Lemalign</span>
+            </p>
+          </motion.div>
+        </div>
       </motion.div>
       <hr className="text-amber-50 w-full " />
-      <div className="flex justify-between items-center px-20 bg-black/30 w-full">
+      <div className="flex flex-col md:flex-row justify-between items-center px-20 bg-black/30 w-full">
         <motion.p variants={childVariant} className="text-sm ">
           Copyight © 2024 <span className="text-[var(--orange)]">Yohannes</span>
           . All Rights Reserved.{" "}

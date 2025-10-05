@@ -3,16 +3,17 @@ import BackButton from "../component/BackButton";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/api";
 import { useAuth } from "../context/authContext";
+import { useProject } from "../context/projectContext";
 
 const UpdateProjectForm = () => {
+  const { fetchProjects } = useProject();
   const { id } = useParams();
   const navigate = useNavigate();
   const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    category: [""],
-    visible: true,
+    category: "",
   });
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
@@ -33,10 +34,9 @@ const UpdateProjectForm = () => {
         setFormData({
           title: project.title || "",
           description: project.description || "",
-          category: project.category?.length > 0 ? project.category : [""],
-          visible: project.visible || true,
+          category: project.category || "",
         });
-        setImagePreview(project.image || "");
+        setImagePreview(project.image.url || "");
         setIsLoading(false);
       } catch (error) {
         setErrors({
@@ -77,13 +77,10 @@ const UpdateProjectForm = () => {
         "Description can only contain letters, numbers, spaces, and common punctuation";
     }
 
-    if (
-      formData.category.length === 0 ||
-      formData.category.every((cat) => !cat.trim())
-    ) {
-      newErrors.category = "At least one category is required";
-    } else if (formData.category.some((cat) => cat.length > 50)) {
-      newErrors.category = "Each category must be less than 50 characters";
+    if (!formData.category.trim()) {
+      newErrors.category = "category is required";
+    } else if (formData.category.length > 50) {
+      newErrors.category = "category must be less than 50 characters";
     }
 
     if (imageFile) {
@@ -102,28 +99,12 @@ const UpdateProjectForm = () => {
     const file = e.target.files[0];
     setImageFile(file);
     if (file && file.type.startsWith("image/")) {
+      if (imagePreview && imagePreview.startsWith("blob:")) {
+        URL.revokeObjectURL(imagePreview);
+      }
       setImagePreview(URL.createObjectURL(file));
     } else {
       setImagePreview(formData.image || "");
-    }
-  };
-
-  const handleCategoryChange = (index, value) => {
-    const newCategories = [...formData.category];
-    newCategories[index] = value;
-    setFormData({ ...formData, category: newCategories });
-  };
-
-  const addCategory = () => {
-    setFormData({ ...formData, category: [...formData.category, ""] });
-  };
-
-  const removeCategory = (index) => {
-    if (formData.category.length > 1) {
-      setFormData({
-        ...formData,
-        category: formData.category.filter((_, i) => i !== index),
-      });
     }
   };
 
@@ -137,10 +118,7 @@ const UpdateProjectForm = () => {
       const dataToSend = new FormData();
       dataToSend.append("title", formData.title);
       dataToSend.append("description", formData.description);
-      dataToSend.append("visible", formData.visible);
-      formData.category
-        .filter((cat) => cat.trim())
-        .forEach((cat) => dataToSend.append("category[]", cat));
+      dataToSend.append("category", formData.category);
       if (imageFile) {
         dataToSend.append("image", imageFile);
       }
@@ -151,10 +129,10 @@ const UpdateProjectForm = () => {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
-          timeout: 30000,
         },
       });
       console.log("PATCH response:", response.data);
+      fetchProjects();
       navigate("/admin"); // Navigate to project list on success
     } catch (error) {
       console.error("PATCH request error:", error, error.response);
@@ -246,33 +224,18 @@ const UpdateProjectForm = () => {
           <label className="block text-sm font-medium text-[#FAAD1B]">
             Categories
           </label>
-          {formData.category.map((cat, index) => (
-            <div key={index} className="flex items-center mt-1">
-              <input
-                type="text"
-                value={cat}
-                onChange={(e) => handleCategoryChange(index, e.target.value)}
-                placeholder="e.g. design, illustration..."
-                className="block w-full rounded-md border-[#242424] bg-[#242424] text-white shadow-sm focus:border-[#22304C] focus:ring focus:ring-[#22304C] focus:ring-opacity-50"
-              />
-              {formData.category.length > 1 && (
-                <button
-                  type="button"
-                  onClick={() => removeCategory(index)}
-                  className="ml-2 text-red-600 hover:text-red-800"
-                >
-                  Remove
-                </button>
-              )}
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={addCategory}
-            className="mt-2 text-[#FAAD1B] hover:text-[#22304C]"
-          >
-            Add Category
-          </button>
+          <div className="flex items-center mt-1">
+            <input
+              type="text"
+              value={formData.category}
+              onChange={(e) =>
+                setFormData({ ...formData, category: e.target.value })
+              }
+              placeholder="e.g. design, illustration..."
+              className="block w-full rounded-md border-[#242424] bg-[#242424] text-white shadow-sm focus:border-[#22304C] focus:ring focus:ring-[#22304C] focus:ring-opacity-50"
+            />
+          </div>
+
           {errors.category && (
             <p className="mt-1 text-sm text-red-600">{errors.category}</p>
           )}
@@ -300,21 +263,6 @@ const UpdateProjectForm = () => {
           {errors.image && (
             <p className="mt-1 text-sm text-red-600">{errors.image}</p>
           )}
-        </div>
-
-        <div className="mb-4">
-          <label className="flex items-center text-sm font-medium text-[#FAAD1B]">
-            <input
-              type="checkbox"
-              id="visible"
-              checked={formData.visible}
-              onChange={(e) =>
-                setFormData({ ...formData, visible: e.target.checked })
-              }
-              className="mr-2"
-            />
-            Visible
-          </label>
         </div>
 
         {errors.submit && (
