@@ -72,7 +72,11 @@ const containerVariant = {
 
 const childVariant = {
   hidden: { opacity: 0, y: -20 },
-  show: { opacity: 1, y: 0 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: easeInOut },
+  },
 };
 const Services = () => {
   const [showing, setShowing] = useState(false);
@@ -113,7 +117,15 @@ const Services = () => {
             onClick={handleShow}
             className="bg-[var(--orange)] text-black rounded-md px-2 py-0 w-16 h-12  "
           >
-            {showing ? "prev" : "next"}
+            {showing ? (
+              <p className="flex items-center font-bold ">
+                <span className="text-2xl font-extrabold">{"<"}</span>prev
+              </p>
+            ) : (
+              <p className="flex items-center font-bold ">
+                next <span className="text-2xl font-extrabold">{">"}</span>
+              </p>
+            )}
           </button>
         </div>
 

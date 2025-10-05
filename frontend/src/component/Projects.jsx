@@ -40,12 +40,10 @@ const Projects = () => {
     }
   }, [projects, filter]);
 
-  console.log("projects", projects);
-  console.log("fil projects", filteredProjects);
-
   const [showing, setShowing] = useState(false);
 
   const handleShow = () => {
+    setFilter("all");
     setShowing((prev) => !prev);
   };
 
@@ -119,7 +117,7 @@ const Projects = () => {
               onClick={handleShow}
               className="bg-[var(--orange)] py-1 rounded-md px-2 text-black"
             >
-              {showing ? "Hide Services" : "View All Projects"}
+              {showing ? "Hide Projects" : "View All Projects"}
             </button>
           </div>
         </div>

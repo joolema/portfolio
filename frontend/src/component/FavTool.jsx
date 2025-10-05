@@ -5,7 +5,7 @@ const containerVariant = {
   show: {
     opacity: 1,
     x: 0,
-    transition: { staggerChildren: 0.1, ease: easeInOut },
+    transition: { duration: 1, staggerChildren: 0.2, ease: easeInOut },
   },
 };
 

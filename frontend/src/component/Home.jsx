@@ -32,7 +32,7 @@ const itemVariants = {
 
 const variant2 = {
   hidden: { opacity: 0, x: 50 },
-  show: { opacity: 1, x: 0, transition: { duration: 1, ease: easeInOut } },
+  show: { opacity: 1, x: 0, transition: { duration: 2, ease: easeInOut } },
 };
 const BannerContent = () => {
   const items = ["Architecture Student", "Graphic Designer", "Logo & Identity"];
